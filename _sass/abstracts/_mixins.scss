@@ -32,3 +32,47 @@
   }
 }
 
+
+/// @author Henrik Ekelöf
+@mixin listReset {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+/// @author Henrik Ekelöf
+@mixin imageReplace( $w, $h ) {
+  display: block;
+  width: $w;
+  height: 0;
+  padding-top: $h;
+  background-position: 0 0;
+  background-repeat: no-repeat;
+  background-size: $w auto;
+  overflow: hidden;
+}
+
+/// @author Henrik Ekelöf
+@mixin editMode() {
+  .sv-edit-mode &,
+  .sv-editing-mode &,
+  .sv-classic-edit-mode & {
+    @content;
+  }
+}
+
+/// @author Henrik Ekelöf
+@mixin placeholder() {
+  &::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+    @content;
+  }
+  &::-moz-placeholder { /* Firefox 19+ */
+    @content;
+  }
+  &:-ms-input-placeholder { /* IE 10+ */
+    @content;
+  }
+  &:-moz-placeholder { /* Firefox 18- */
+    @content;
+  }
+}

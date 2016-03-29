@@ -67,7 +67,7 @@
         sass       : 'main.scss',
         css        : 'main.css',
         cssmin     : 'main.min.css',
-        cssfontsmin: 'fonts.min.css',
+        cssfonts   : 'fonts.css',
         lodash     : 'lodash.custom.js',
         sitejs     : 'main-site.js',
         vendorjs   : 'main-vendor.js',
@@ -78,14 +78,14 @@
 
     //----- Build for prod -----//
 
-    gulp.task( 'build', [ 'imgoptimize', 'jsmin', 'cssmin', 'cssfontsmin' ], function() {
+    gulp.task( 'build', [ 'imgoptimize', 'jsmin', 'cssmin', 'cssfonts' ], function() {
         console.log( 'Building ' + options.env );
         return gulp.src( [
                        _devDir( files.js ),
                        _devDir( files.css ),
                        _devDir( files.jsmin ),
                        _devDir( files.cssmin ),
-                       _devDir( files.cssfontsmin )
+                       _devDir( files.cssfonts )
                    ], { base: dir.dev } )
                    .pipe( gulp.dest( dir[ options.env ] ) );
     } );
@@ -120,8 +120,8 @@
                    .pipe( gulp.dest( dir.dev ) );
     } );
 
-    gulp.task( 'cssfontsmin', function() {
-        return gulp.src( path.join( dir.fonts, files.cssfontsmin ) )
+    gulp.task( 'cssfonts', function() {
+        return gulp.src( path.join( dir.fonts, files.cssfonts ) )
                    .pipe( file2base64() )
                    .pipe( gulp.dest( dir.dev ) );
     } );
@@ -166,7 +166,7 @@
                    } );
     } );
 
-    gulp.task( 'vendorjs', [ 'lodash' ], function() {
+    gulp.task( 'vendorjs', function() {
         // Add lodash to lib build
         var vendorjs = dir.vendorjs;
         vendorjs.unshift( path.join( dir.temp, files.lodash ) );
@@ -181,7 +181,7 @@
                    .pipe( gulp.dest( dir.dev ) );
     } );
 
-    gulp.task( 'js', [ 'sitejs', 'vendorjs' ], function() {
+    gulp.task( 'js', [ 'sitejs', 'lodash', 'vendorjs' ], function() {
         return gulp.src( [
                        _devDir( files.vendorjs ),
                        _devDir( files.sitejs )
@@ -190,7 +190,16 @@
                    .pipe( gulp.dest( dir.dev ) );
     } );
 
-    gulp.task( 'jsfast', [ 'sitejs' ], function() {
+    gulp.task( 'jsdev', [ 'sitejs' ], function() {
+        return gulp.src( [
+                       _devDir( files.vendorjs ),
+                       _devDir( files.sitejs )
+                   ] )
+                   .pipe( concat( files.js ) )
+                   .pipe( gulp.dest( dir.dev ) );
+    } );
+
+    gulp.task( 'jsvendor', [ 'vendorjs' ], function() {
         return gulp.src( [
                        _devDir( files.vendorjs ),
                        _devDir( files.sitejs )
@@ -219,8 +228,8 @@
     } );
 
     gulp.task( 'watch', [ 'css', 'js', 'connect' ], function() {
-        gulp.watch( path.join( dir.hintedjs, '/**/*.js' ), [ 'jsfast' ] );
-        gulp.watch( dir.vendorjs, [ 'js' ] );
+        gulp.watch( path.join( dir.hintedjs, '/**/*.js' ), [ 'jsdev' ] );
+        gulp.watch( dir.vendorjs, [ 'jsvendor' ] );
         gulp.watch( path.join( dir.sass, '/**/*.scss' ), [ 'css' ] );
     } );
 

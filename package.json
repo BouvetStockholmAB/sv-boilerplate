@@ -1,25 +1,25 @@
 {
-  "name": "hh",
+  "name": "sv-boilerplate",
   "version": "1.0.0",
-  "description": "Samspel",
+  "description": "SiteVision Front End Boilerplate",
   "main": "gulpfile.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/BouvetStockholmAB/samspel.git"
+    "url": "https://github.com/BouvetStockholmAB/sv-boilerplate.git"
   },
   "keywords": [
-    "HH",
+    "Bouvet",
     "SiteVision"
   ],
   "author": "Bouvet",
   "license": "UNLICENSED",
   "bugs": {
-    "url": "https://github.com/BouvetStockholmAB/samspel/issues"
+    "url": "https://github.com/BouvetStockholmAB/sv-boilerplate/issues"
   },
-  "homepage": "https://github.com/BouvetStockholmAB/samspel/",
+  "homepage": "http://bouvetstockholmab.github.io/sv-boilerplate/",
   "devDependencies": {
     "gulp": "^3.9.1",
     "gulp-autoprefixer": "^3.1.0",

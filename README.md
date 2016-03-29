@@ -1,5 +1,9 @@
 # sv-boilerplate
-SiteVision developer project boilerplate. Node, Gulp, Sass, Autoprefixer and more.
+
+### SiteVision Front End Boilerplate. 
+
+Node, Gulp, Sass, Autoprefixer and more.
+
 
 ## Sass 
 
@@ -9,13 +13,34 @@ http://sass-guidelin.es/#architecture
 
 ## How to use
 
+`$ gulp`
+`$ gulp build`
 
 
 ## Setup
 
-- Edit _config.yml (set project name etc)
-- Edit additional-head-elements.vm (set file name) ... 
-- Metadata: assetJsMain, assetCssMain, assetCssFonts
+### GitHub Repo
+
+- Set up GitHub repo
+- Create branch `gh-pages`
+- Delete master
+- Clone to your computer
+
+### Project files
+
+- Edit package.json
+    - Name, description, GitHub URLs
+- Edit _config.yml (set project name)
+- Run `$ npm install`
+
+
+### SiteVision
+
+- Add content from additional-head-elements.vm to SiteVision
+- Add metadata (links): assetJsMain, assetCssMain, assetCssFonts
+- Point metadata to GitHub pages URLs when site is generated
+
+
 
 ### Fonts
 

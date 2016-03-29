@@ -6,7 +6,7 @@
  * Site script global namespace. Page or component specific code
  * should be placed under this namespace.
  */
-var BV = BV || {}, //ignore jslint
+var BV = BV || {}, 
     /**
      * Toolbox Library
      */

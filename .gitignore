@@ -1,4 +1,13 @@
 
+# Project files
+_dev
+_temp
+
+
+# Node JS
+node_modules
+
+
 # Mac OS X
 .DS_Store
 

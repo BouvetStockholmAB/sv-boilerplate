@@ -1,0 +1,38 @@
+
+%listLinks {
+    a {
+        &, &:link {
+            text-decoration: none;
+        }
+        &:visited {
+
+        }
+        &:hover, &:focus {
+            text-decoration: underline;
+        }
+        &:active {
+
+        }
+    }
+}
+
+%contentLinks {
+    // Content links
+    a {
+        &, &:link {
+            text-decoration: none;
+        }
+        &:visited {
+
+        }
+        &:hover, &:focus {
+            text-decoration: underline;
+        }
+        &:active {
+
+        }
+    }
+}
+
+
+
