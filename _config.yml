@@ -5,7 +5,6 @@ name: SiteVision Front End Boilerplate
 # Short description (goes below the title; it will also be used in the RSS feed)
 description: This is a sample Jekyll Blog.
 
-
 defaults:
   -
     scope:
