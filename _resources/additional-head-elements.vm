@@ -1,0 +1,62 @@
+#set ($currentPage = $sitevisionUtils.getPortletContextUtil().getCurrentPage())
+#set ($propertyUtil = $sitevisionUtils.getPropertyUtil())
+#set ($session = $request.getSession())
+#set ($devmode = $request.getParameter("devmode"))
+
+
+## Check if URL parameter is set
+#if ($devmode)
+    #if ($devmode == "false")
+        $session.setAttribute("useLocalAssets", "")
+    #else
+        $session.setAttribute("useLocalAssets", "local")
+    #end
+#end
+
+## Check session attribute
+#set ($useLocalAssets = ($session.getAttribute("useLocalAssets") == "local"))
+
+#if ($useLocalAssets)
+    
+    ## Localhost assets
+    #set ($assetCssMain = "http://local.dev:8080/main.css")
+    #set ($assetJsMain = "http://local.dev:8080/main.js")
+
+    <script> console.log('Using local assets'); </script>
+    
+#else
+    
+    #set ($assetCssMain = $propertyUtil.getNode($currentPage, 'assetCssMain'))
+    #if ($assetCssMain)
+        #set ($assetCssMain = $propertyUtil.getString($assetCssMain, 'URI'))
+    #else
+        #set ($assetCssMain = $propertyUtil.getString($currentPage, 'assetCssMain'))
+    #end
+
+    #set ($assetJsMain = $propertyUtil.getNode($currentPage, 'assetJsMain'))
+    #if ($assetJsMain)
+        #set ($assetJsMain = $propertyUtil.getString($assetJsMain, 'URI'))
+    #else
+        #set ($assetJsMain = $propertyUtil.getString($currentPage, 'assetJsMain'))
+    #end
+
+#end
+
+## assetCssFonts is fetched with AJAX and must always be on same domain as site
+#set ($assetCssFonts = $propertyUtil.getNode($currentPage, 'assetCssFonts'))
+#if ($assetCssFonts)
+    #set ($assetCssFonts = $propertyUtil.getString($assetCssFonts, 'URI'))
+#else
+    #set ($assetCssFonts = $propertyUtil.getString($currentPage, 'assetCssFonts'))
+#end
+
+<script>
+    ( function () {
+        d.className += ' bv-js ';
+    }( document.documentElement ) );
+</script>
+
+<link rel="stylesheet" media="all" href="$!{assetCssMain}">
+<script id="js-main"
+        data-fonts="$!{assetCssFonts}"
+        src="$!{assetJsMain}"></script>

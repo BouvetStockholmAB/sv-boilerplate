@@ -1,0 +1,41 @@
+{
+  "name": "hh",
+  "version": "1.0.0",
+  "description": "Samspel",
+  "main": "gulpfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/BouvetStockholmAB/samspel.git"
+  },
+  "keywords": [
+    "HH",
+    "SiteVision"
+  ],
+  "author": "Bouvet",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/BouvetStockholmAB/samspel/issues"
+  },
+  "homepage": "https://github.com/BouvetStockholmAB/samspel/",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-autoprefixer": "^3.1.0",
+    "gulp-concat": "^2.6.0",
+    "gulp-connect": "^2.3.1",
+    "gulp-css-file2base64": "^0.1.1",
+    "gulp-cssnano": "^2.1.1",
+    "gulp-imagemin": "^2.4.0",
+    "gulp-inline-base64": "^0.1.4",
+    "gulp-jscs": "^3.0.2",
+    "gulp-jshint": "^2.0.0",
+    "gulp-lodash-builder": "^1.0.0",
+    "gulp-rename": "^1.2.2",
+    "gulp-sass": "^2.2.0",
+    "gulp-uglify": "^1.5.3",
+    "jshint": "^2.8.0",
+    "jshint-stylish": "^2.1.0"
+  }
+}
