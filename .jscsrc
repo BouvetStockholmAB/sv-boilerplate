@@ -1,0 +1,81 @@
+{
+    "requireCurlyBraces": [
+        "if",
+        "else",
+        "for",
+        "while",
+        "do",
+        "try",
+        "catch"
+    ],
+    "requireSpaceAfterKeywords": [
+        "if",
+        "else",
+        "for",
+        "while",
+        "do",
+        "switch",
+        "case",
+        "return",
+        "try",
+        "catch",
+        "typeof"
+    ],
+    "requireSpaceBeforeBlockStatements": true,
+    "requireParenthesesAroundIIFE": true,
+    "requireSpacesInConditionalExpression": true,
+    "disallowSpacesInNamedFunctionExpression": {
+        "beforeOpeningRoundBrace": true
+    },
+    "disallowSpacesInFunctionDeclaration": {
+        "beforeOpeningRoundBrace": true
+    },
+    "requireMultipleVarDecl": "onevar",
+    "requireBlocksOnNewline": 1,
+    "disallowEmptyBlocks": true,
+    "requireSpacesInsideParentheses": "all",
+    "requireSpacesInsideObjectBrackets": "all",
+    "requireSpacesInsideArrayBrackets": "all",
+    "disallowSpaceAfterObjectKeys": {
+        "allExcept": [ "aligned" ]
+    },
+    "requireCommaBeforeLineBreak": true,
+    "disallowSpaceAfterPrefixUnaryOperators": true,
+    "disallowSpaceBeforePostfixUnaryOperators": true,
+    "disallowSpaceBeforeBinaryOperators": [
+        ","
+    ],
+    "requireSpaceBeforeBinaryOperators": [
+        "=",
+        "+=",
+        "-=",
+        "+",
+        "-",
+        "*",
+        "/",
+        "&&",
+        "||",
+        "===",
+        "==",
+        ">=",
+        "<=",
+        ">",
+        "<",
+        "!=",
+        "!=="
+    ],
+    "disallowCommaBeforeLineBreak": null,
+    "disallowImplicitTypeConversion": [ "string" ],
+    "requireSpaceAfterBinaryOperators": true,
+    "requireCamelCaseOrUpperCaseIdentifiers": true,
+    "disallowKeywords": [ "with" ],
+    "validateQuoteMarks": "'",
+    "validateIndentation": 4,
+    "maximumLineLength": 100,
+    "disallowMixedSpacesAndTabs": true,
+    "disallowTrailingComma": true,
+    "disallowKeywordsOnNewLine": [ "else" ],
+    "requireCapitalizedConstructors": true,
+    "requireDotNotation": true,
+    "disallowYodaConditions": true
+}
