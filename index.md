@@ -2,9 +2,9 @@
 title: Scripts and stylesheets
 ---
 
-## Scripts and stylesheets
+## {{ page.title }}
 
-### Last build: {{ site.time | date: "%Y-%m-%d %H:%M" }}
+*Last build: {{ site.time | date: "%Y-%m-%d %H:%M" }}*
 
 <ul>
 {% for file in site.static_files %}
