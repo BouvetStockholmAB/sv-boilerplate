@@ -41,7 +41,7 @@
         cssnano       = require( 'gulp-cssnano' );
 
     options = {
-        env: _getArg( '--env' ) === 'dev' ? 'dev' : 'dist'
+        dev: _getArg( '--dev' )
     };
 
     dir = {
@@ -64,22 +64,23 @@
     };
 
     files = {
-        sass       : 'main.scss',
-        css        : 'main.css',
-        cssmin     : 'main.min.css',
-        cssfonts   : 'fonts.css',
-        lodash     : 'lodash.custom.js',
-        sitejs     : 'main-site.js',
-        vendorjs   : 'main-vendor.js',
-        js         : 'main.js',
-        jsmin      : 'main.min.js'
+        sass    : 'main.scss',
+        css     : 'main.css',
+        cssmin  : 'main.min.css',
+        cssfonts: 'fonts.css',
+        lodash  : 'lodash.custom.js',
+        sitejs  : 'main-site.js',
+        vendorjs: 'main-vendor.js',
+        js      : 'main.js',
+        jsmin   : 'main.min.js'
     };
 
 
     //----- Build for prod -----//
 
     gulp.task( 'build', [ 'imgoptimize', 'jsmin', 'cssmin', 'cssfonts' ], function() {
-        console.log( 'Building ' + options.env );
+        var destDir = options.dev ? 'dev' : 'dist';
+        console.log( 'Building ' + destDir );
         return gulp.src( [
                        _devDir( files.js ),
                        _devDir( files.css ),
@@ -87,7 +88,7 @@
                        _devDir( files.cssmin ),
                        _devDir( files.cssfonts )
                    ], { base: dir.dev } )
-                   .pipe( gulp.dest( dir[ options.env ] ) );
+                   .pipe( gulp.dest( dir[ destDir ] ) );
     } );
 
     //----- Building CSS -----//

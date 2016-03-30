@@ -16,6 +16,3 @@ title: Scripts and stylesheets
 
 <p>GitHub repo: <a href="{{ site.github.repository_url }}">{{ site.github.project_title }}</a></p>
 
-
-
-
