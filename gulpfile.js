@@ -58,8 +58,9 @@
         ],
         temp    : '_temp',
         vendorjs: [
-            '_js/vendor/fastclick.js',
-            '_js/vendor/jquery-custom-plugins.js'
+            // '_js/vendor/fastclick.js',
+            '_js/vendor/jquery-custom-plugins.js',
+            '_js/vendor/swiss-army-knife.custom.js'
         ]
     };
 
@@ -170,7 +171,7 @@
     gulp.task( 'vendorjs', function() {
         // Add lodash to lib build
         var vendorjs = dir.vendorjs;
-        vendorjs.unshift( path.join( dir.temp, files.lodash ) );
+        // vendorjs.unshift( path.join( dir.temp, files.lodash ) );
         return gulp.src( vendorjs )
                    .pipe( concat( files.vendorjs ) )
                    .pipe( gulp.dest( dir.dev ) );

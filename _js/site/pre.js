@@ -1,4 +1,4 @@
-/*global $svjq, _ */
+/*global $svjq */
 
 // ==|== Global Namespace Variables ============================================================= //
 
@@ -6,7 +6,7 @@
  * Site script global namespace. Page or component specific code
  * should be placed under this namespace.
  */
-var BV = BV || {}, 
+var BV = BV || {},
     /**
      * Toolbox Library
      */
@@ -16,7 +16,7 @@ var BV = BV || {},
 // ==|== Throttle function ====================================================================== //
 // https://remysharp.com/2010/07/21/throttling-function-calls
 
-_b.throttle = function( fn, threshhold, scope ) {
+_b.throttle = function ( fn, threshhold, scope ) {
 
     'use strict';
 
@@ -24,14 +24,14 @@ _b.throttle = function( fn, threshhold, scope ) {
 
     var last, deferTimer;
 
-    return function() {
+    return function () {
         var context = scope || this,
-            now = new Date().getTime(),
-            args = arguments;
+            now     = new Date().getTime(),
+            args    = arguments;
         if ( last && now < last + threshhold ) {
             // hold on to it
             clearTimeout( deferTimer );
-            deferTimer = setTimeout( function() {
+            deferTimer = setTimeout( function () {
                 last = now;
                 fn.apply( context, args );
             }, threshhold );
@@ -44,6 +44,68 @@ _b.throttle = function( fn, threshhold, scope ) {
 };
 
 
+
+// ==|== Misc Toolbox Functions ================================================================= //
+
+( function () {
+
+    'use strict';
+
+    [ 'Arguments', 'Array', 'Function', 'String', 'Number', 'Date', 'RegExp' ]
+        .forEach( function ( name ) {
+            _b[ 'is' + name ] = function ( obj ) {
+                return Object.prototype.toString.call( obj ) === '[object ' + name + ']';
+            };
+        } );
+
+    // Test for integer
+    _b.isInt = function ( n ) {
+        return Number( n ) === n && n % 1 === 0;
+    };
+
+    // Test for float
+    _b.isFloat = function ( n ) {
+        return n === Number( n ) && n % 1 !== 0;
+    };
+
+    function isObject( o ) {
+        return o !== null && typeof o === 'object' && !Array.isArray( o );
+    }
+
+    function isObjectObject( o ) {
+        return isObject( o ) === true && Object.prototype.toString.call( o ) === '[object Object]';
+    }
+
+    _b.isPlainObject = function ( o ) {
+
+        var ctor, prot;
+
+        if ( isObjectObject( o ) === false ) {
+            return false;
+        }
+
+        // If has modified constructor
+        ctor = o.constructor;
+        if ( typeof ctor !== 'function' ) {
+            return false;
+        }
+
+        // If has modified prototype
+        prot = ctor.prototype;
+        if ( isObjectObject( prot ) === false ) {
+            return false;
+        }
+
+        // If constructor does not have an Object-specific method
+        if ( prot.hasOwnProperty( 'isPrototypeOf' ) === false ) {
+            return false;
+        }
+
+        // Most likely a plain Object
+        return true;
+    };
+
+}() );
 
 // ==|== Custom localStorage function w. detection ============================================== //
 
@@ -124,7 +186,7 @@ _b.cutsTheMustard = (
          */
         js: function ( src, beforeEl ) {
             var script = doc.createElement( s );
-            beforeEl = beforeEl || doc.getElementsByTagName( s )[ 0 ];
+            beforeEl   = beforeEl || doc.getElementsByTagName( s )[ 0 ];
             script.src = src;
             beforeEl.parentNode.insertBefore( script, beforeEl );
             return script;
@@ -245,7 +307,7 @@ _b.cutsTheMustard = (
 
             currentFunction = win;
 
-            if ( _.isString( fns[ i ] ) && functionsCalled.indexOf( fns[ i ] ) === -1 ) {
+            if ( _b.isString( fns[ i ] ) && functionsCalled.indexOf( fns[ i ] ) === -1 ) {
 
                 functionsCalled.push( fns[ i ] );
                 fn = getFunction( fns[ i ] );
@@ -276,7 +338,7 @@ _b.cutsTheMustard = (
     _b.init = function ( fn ) {
 
         if ( isInitiated ) {
-            if ( _.isString( fn ) ) {
+            if ( _b.isString( fn ) ) {
                 exec( [ fn ] );
             } else if ( typeof ( fn ) === 'function' ) {
                 fn();
@@ -285,7 +347,7 @@ _b.cutsTheMustard = (
             return;
         }
 
-        if ( !fn || ( _.isObject( fn ) && fn.target ) ) {
+        if ( !fn || ( _b.isPlainObject( fn ) && fn.target ) ) {
             if ( functions.length > 0 ) {
                 exec();
             }
@@ -293,9 +355,9 @@ _b.cutsTheMustard = (
             return;
         }
 
-        if ( _.isString( fn ) || typeof ( fn ) === 'function' ) {
+        if ( _b.isString( fn ) || typeof ( fn ) === 'function' ) {
             include( fn );
-        } else if ( _.isArray( fn ) ) {
+        } else if ( _b.isArray( fn ) ) {
             fn.forEach( function ( f ) {
                 include( f );
             } );

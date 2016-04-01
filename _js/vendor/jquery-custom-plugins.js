@@ -1,5 +1,8 @@
 /*global $svjq */
 
+
+// ==|== Prettier Vertical Visbility Toggler ==================================================== //
+
 ( function ( $ ) {
 
     'use strict';
@@ -14,12 +17,34 @@
          */
         $.fn.toggleVertical = function ( duration ) {
             return this.animate( {
-                height: 'toggle',
-                paddingTop: 'toggle',
+                height       : 'toggle',
+                paddingTop   : 'toggle',
                 paddingBottom: 'toggle',
-                opacity: 'toggle'
+                opacity      : 'toggle'
             }, duration || 300 );
         };
     }
 
 }( $svjq ) );
+
+
+// ==|== Exists Function ======================================================================== //
+
+( function ( $ ) {
+
+    'use strict';
+
+    if ( !$.fn.exists ) {
+        /**
+         * Instead of $( el ).length > 0 you may use $( el ).exists()
+         * @example
+         * $( '.foo' ).exists()
+         * // => false
+         */
+        $.fn.exists = function () {
+            return this.length > 0;
+        };
+    }
+
+}( $svjq ) );
+

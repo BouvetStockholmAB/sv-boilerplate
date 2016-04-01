@@ -1,4 +1,4 @@
-/*global _, FastClick, _b */
+/*global FastClick, _b */
 
 
 // ==|== FastClick ============================================================================== //
@@ -18,7 +18,7 @@
 
         function attachFastClick( el ) {
 
-            if ( !_.isObject( el ) ) {
+            if ( !_b.isPlainObject( el ) ) {
                 return;
             }
             if ( el.nodeType === 1 ) {
@@ -37,7 +37,7 @@
         }
 
         // Must be a DOM node or nodeList - no jQuery objects please.
-        _.each( elms, attachFastClick );
+        elms.forEach( attachFastClick );
 
     };
 
