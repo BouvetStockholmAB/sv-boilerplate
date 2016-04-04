@@ -1,8 +1,29 @@
 /*global console, require, process */
 
-( function() {
+( function () {
 
     'use strict';
+
+    var dir,
+        files,
+        options,
+        path          = require( 'path' ),
+        gulp          = require( 'gulp' ),
+        gulpif        = require( 'gulp-if' ),
+        rename        = require( 'gulp-rename' ),
+        del           = require( 'del' ),
+        concat        = require( 'gulp-concat' ),
+        connect       = require( 'gulp-connect' ),
+        sass          = require( 'gulp-sass' ),
+        imagemin      = require( 'gulp-imagemin' ),
+        inlineBase64  = require( 'gulp-inline-base64' ),
+        file2base64   = require( 'gulp-css-file2base64' ),
+        lodashBuilder = require( 'gulp-lodash-builder' ),
+        jshint        = require( 'gulp-jshint' ),
+        jscs          = require( 'gulp-jscs' ),
+        uglify        = require( 'gulp-uglify' ),
+        autoprefixer  = require( 'gulp-autoprefixer' ),
+        cssnano       = require( 'gulp-cssnano' );
 
     //----- Helpers -----//
 
@@ -21,27 +42,17 @@
         return ( index < 0 ) ? null : ( !next || next[ 0 ] === '-' ) ? true : next;
     }
 
-    var dir,
-        files,
-        options,
-        path          = require( 'path' ),
-        gulp          = require( 'gulp' ),
-        rename        = require( 'gulp-rename' ),
-        concat        = require( 'gulp-concat' ),
-        connect       = require( 'gulp-connect' ),
-        sass          = require( 'gulp-sass' ),
-        imagemin      = require( 'gulp-imagemin' ),
-        inlineBase64  = require( 'gulp-inline-base64' ),
-        file2base64   = require( 'gulp-css-file2base64' ),
-        lodashBuilder = require( 'gulp-lodash-builder' ),
-        jshint        = require( 'gulp-jshint' ),
-        jscs          = require( 'gulp-jscs' ),
-        uglify        = require( 'gulp-uglify' ),
-        autoprefixer  = require( 'gulp-autoprefixer' ),
-        cssnano       = require( 'gulp-cssnano' );
+    function _timestamp() {
+        var now = new Date(),
+            pad = function ( val ) { return ( val > 9 ? val : '0' + val ); };
+        return pad( now.getFullYear() ) + pad( now.getMonth() + 1 ) +
+               pad( now.getDate() ) + pad( now.getHours() ) +
+               pad( now.getMinutes() ) + pad( now.getSeconds() );
+    }
 
     options = {
-        dev: _getArg( '--dev' )
+        dev: _getArg( '--dev' ),
+        rev: _getArg( '--rev' )
     };
 
     dir = {
@@ -79,9 +90,17 @@
 
     //----- Build for prod -----//
 
-    gulp.task( 'build', [ 'imgoptimize', 'jsmin', 'cssmin', 'cssfonts' ], function() {
-        var destDir = options.dev ? 'dev' : 'dist';
+    gulp.task( 'build', [ 'imgoptimize', 'jsmin', 'cssmin', 'cssfonts' ], function () {
+
+        var destDir = options.dev ? 'dev' : 'dist',
+            useCacheBuster = !!( options.rev && !options.dev ),
+            timestamp      = _timestamp();
+
+        del( [ path.join( dir.dist, '/**/*-*.js' ), path.join( dir.dist, '/**/*-*.css' ) ] );
+        
+        console.log( useCacheBuster );
         console.log( 'Building ' + destDir );
+
         return gulp.src( [
                        _devDir( files.js ),
                        _devDir( files.css ),
@@ -89,6 +108,11 @@
                        _devDir( files.cssmin ),
                        _devDir( files.cssfonts )
                    ], { base: dir.dev } )
+                   .pipe( gulpif( useCacheBuster,
+                       rename( function ( path ) {
+                           path.basename += '-' + timestamp;
+                       } )
+                   ) )
                    .pipe( gulp.dest( dir[ destDir ] ) );
     } );
 
@@ -110,25 +134,25 @@
             } ) );
     }
 
-    gulp.task( 'css', function() {
+    gulp.task( 'css', function () {
         return buildCss( gulp.src( path.join( dir.sass, files.sass ) ) )
             .pipe( gulp.dest( dir.dev ) );
     } );
 
-    gulp.task( 'cssmin', [ 'css' ], function() {
+    gulp.task( 'cssmin', [ 'css' ], function () {
         return gulp.src( [ _devDir( files.css ) ] )
                    .pipe( rename( files.cssmin ) )
                    .pipe( cssnano() )
                    .pipe( gulp.dest( dir.dev ) );
     } );
 
-    gulp.task( 'cssfonts', function() {
+    gulp.task( 'cssfonts', function () {
         return gulp.src( path.join( dir.fonts, files.cssfonts ) )
                    .pipe( file2base64() )
                    .pipe( gulp.dest( dir.dev ) );
     } );
 
-    gulp.task( 'imgoptimize', function() {
+    gulp.task( 'imgoptimize', function () {
         return gulp.src( path.join( dir.images, '/**/*' ) )
                    .pipe( imagemin( {
                        progressive: true,
@@ -142,20 +166,20 @@
 
     //----- Building JS -----//
 
-    gulp.task( 'jshint', function() {
+    gulp.task( 'jshint', function () {
         return gulp.src( path.join( dir.hintedjs, '/**/*.js' ) )
                    .pipe( jshint( '.jshintrc' ) )
                    .pipe( jshint.reporter( 'jshint-stylish' ) )
                    .pipe( jshint.reporter( 'fail' ) );
     } );
 
-    gulp.task( 'jscs', function() {
+    gulp.task( 'jscs', function () {
         return gulp.src( path.join( dir.hintedjs, '/**/*.js' ) )
                    .pipe( jscs() )
                    .pipe( jscs.reporter() );
     } );
 
-    gulp.task( 'lodash', function() {
+    gulp.task( 'lodash', function () {
         return gulp.src( dir.sitejs, {
                        buffer: false
                    } )
@@ -163,12 +187,12 @@
                        target  : path.join( dir.temp, files.lodash ),
                        settings: {}
                    } ) )
-                   .on( 'error', function( err ) {
+                   .on( 'error', function ( err ) {
                        console.log( 'err: ', err );
                    } );
     } );
 
-    gulp.task( 'vendorjs', function() {
+    gulp.task( 'vendorjs', function () {
         // Add lodash to lib build
         var vendorjs = dir.vendorjs;
         // vendorjs.unshift( path.join( dir.temp, files.lodash ) );
@@ -177,13 +201,13 @@
                    .pipe( gulp.dest( dir.dev ) );
     } );
 
-    gulp.task( 'sitejs', function() {
+    gulp.task( 'sitejs', function () {
         return gulp.src( dir.sitejs )
                    .pipe( concat( files.sitejs ) )
                    .pipe( gulp.dest( dir.dev ) );
     } );
 
-    gulp.task( 'js', [ 'sitejs', 'lodash', 'vendorjs' ], function() {
+    gulp.task( 'js', [ 'sitejs', 'lodash', 'vendorjs' ], function () {
         return gulp.src( [
                        _devDir( files.vendorjs ),
                        _devDir( files.sitejs )
@@ -192,7 +216,7 @@
                    .pipe( gulp.dest( dir.dev ) );
     } );
 
-    gulp.task( 'jsdev', [ 'sitejs' ], function() {
+    gulp.task( 'jsdev', [ 'sitejs' ], function () {
         return gulp.src( [
                        _devDir( files.vendorjs ),
                        _devDir( files.sitejs )
@@ -201,7 +225,7 @@
                    .pipe( gulp.dest( dir.dev ) );
     } );
 
-    gulp.task( 'jsvendor', [ 'vendorjs' ], function() {
+    gulp.task( 'jsvendor', [ 'vendorjs' ], function () {
         return gulp.src( [
                        _devDir( files.vendorjs ),
                        _devDir( files.sitejs )
@@ -210,7 +234,7 @@
                    .pipe( gulp.dest( dir.dev ) );
     } );
 
-    gulp.task( 'jsmin', [ 'jshint', 'jscs', 'js' ], function() {
+    gulp.task( 'jsmin', [ 'jshint', 'jscs', 'js' ], function () {
         return gulp.src( [
                        _devDir( files.js )
                    ] )
@@ -222,14 +246,14 @@
 
     //----- Watch -----//
 
-    gulp.task( 'connect', function() {
+    gulp.task( 'connect', function () {
         connect.server( {
             root      : dir.dev,
             livereload: false
         } );
     } );
 
-    gulp.task( 'watch', [ 'css', 'js', 'connect' ], function() {
+    gulp.task( 'watch', [ 'css', 'js', 'connect' ], function () {
         gulp.watch( path.join( dir.hintedjs, '/**/*.js' ), [ 'jsdev' ] );
         gulp.watch( dir.vendorjs, [ 'jsvendor' ] );
         gulp.watch( path.join( dir.sass, '/**/*.scss' ), [ 'css' ] );

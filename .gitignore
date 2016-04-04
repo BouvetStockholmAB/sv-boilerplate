@@ -2,7 +2,8 @@
 # Project files
 _dev
 _temp
-
+dist/*-*.js
+dist/*-*.css
 
 # Node JS
 node_modules
