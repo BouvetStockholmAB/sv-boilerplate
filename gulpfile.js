@@ -71,7 +71,7 @@
         vendorjs: [
             // '_js/vendor/fastclick.js',
             '_js/vendor/jquery-custom-plugins.js',
-            '_js/vendor/swiss-army-knife.custom.js'
+            '_js/vendor/polyfills.js'
         ]
     };
 

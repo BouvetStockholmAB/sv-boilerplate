@@ -19,8 +19,8 @@
 #if ($useLocalAssets)
     
     ## Localhost assets
-    #set ($assetCssMain = "http://local.dev:8080/main.css")
-    #set ($assetJsMain = "http://local.dev:8080/main.js")
+    #set ($assetCssMain = "http://localhost:8080/main.css")
+    #set ($assetJsMain = "http://localhost:8080/main.js")
 
     <script> console.log('Using local assets'); </script>
     
