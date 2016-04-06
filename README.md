@@ -24,7 +24,9 @@ image optimization and embedding and more.
    - [Optimized images](#optimized-images)
    - [Embedded images](#embedded-images)
    - [Async font-face](#async-font-face)
-   - [Sass](#sass) 
+   - [Sass](#sass)
+   - [Lodash](#lodash)
+   - [Autoprefixer](#autoprefixer)
 
 
 ## Why use this?
@@ -105,6 +107,7 @@ When you write the code you will serve your JS and CSS from a local webserver (s
 - Watch `_js` and `_sass` folders for changes
 - Build and concatenate JS on change
 - Compile Sass to CSS on change
+- Build custom version of Lodash based on usage in files
 
 Default URLs for local files:
 
@@ -119,6 +122,8 @@ Default URLs for local files:
 - Build, concatenate and minify JS
 - Optimize images
 - Compile Sass and minify the CSS
+- Build custom version of Lodash based on usage in files (optional)
+- Autoprefixer
 
 `$ gulp build --rev`
 
@@ -170,4 +175,24 @@ Some stuff included:
 - `em` and `rem` helper functions  
 - Example on how to use same background multiple times with only one include (see `_bgimg-extends.scss`)
 
+### Lodash
+
+You may use Lodash in your JS files, but must first uncomment one row in `gulpfile.js` so it is included in the build. 
+
+Gulp will search for usage of Lodash and build a custom version with only the parts of Lodash that is needed.
+ 
+
+### Autoprefixer
+
+Autoprefixer will check your CSS files and add vendor prefixes if needed based on the latest information from [Can I Use](http://caniuse.com). You write CSS without worrying about vendor prefixes, like this:
+
+```
+.foo { transition: transform 1s; }
+```
+
+When you save the file, Autoprefixer transforms that rule into cross-browser CSS:
+
+```
+.foo { -webkit-transition: -webkit-transform 1s; transition: transform 1s }
+```
 

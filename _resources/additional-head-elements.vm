@@ -50,13 +50,101 @@
     #set ($assetCssFonts = $propertyUtil.getString($currentPage, 'assetCssFonts'))
 #end
 
+
 <script>
-    ( function () {
-        d.className += ' bv-js ';
-    }( document.documentElement ) );
+    
+    var _b = _b || {}, BV = BV || {}; _b.init = [];   
+    document.documentElement.className += ' bv-js ';
+    
 </script>
 
 <link rel="stylesheet" media="all" href="$!{assetCssMain}">
-<script id="js-main"
-        data-fonts="$!{assetCssFonts}"
-        src="$!{assetJsMain}"></script>
+
+<script>
+
+    ( function ( win, doc, jq, s, assetJsMain, assetCssFonts ) {
+
+        'use strict';
+
+        var fontCss;
+
+        _b.load = {
+            /**
+             * Load JavaScript file async by adding script tag to DOM.
+             * May be used for own scripts or external scripts.
+             * (script) _b.load.js( 'some-js-file.js' ) (/script)
+             * // => Loads and executes some-js-file.js
+             */
+            js: function ( src ) {
+                var script = doc.createElement( s ),
+                    beforeEl = doc.getElementsByTagName( s )[ 0 ];
+                script.src = src;
+                beforeEl.parentNode.insertBefore( script, beforeEl );
+                return script;
+            }
+        };
+
+        _b.appendStyle = function ( data ) {
+            var style;
+            style = doc.createElement( 'style' );
+            style.setAttribute( 'type', 'text/css' );
+            if ( style.styleSheet ) {
+                style.styleSheet.cssText = data;
+            } else {
+                style.appendChild( doc.createTextNode( data ) );
+            }
+            doc.head.appendChild( style );
+        };
+
+        _b.localStorage = ( function () {
+
+            var uid = new Date().toString(),
+                result;
+
+            try {
+                w.localStorage.setItem( uid, uid );
+                result = w.localStorage.getItem( uid ) === uid;
+                w.localStorage.removeItem( uid );
+                return result && w.localStorage;
+            } catch ( exception ) {
+            }
+
+        }() );
+
+        _b.sessionStorage = _b.localStorage ? w.sessionStorage : false;
+
+
+        
+        if ( assetCssFonts && _b.localStorage ) {
+            
+            fontCss = _b.localStorage.getItem( 'bvSiteFont' );
+
+            if ( fontCss ) {
+                _b.appendStyle( fontCss );
+            } else {
+                jq( function () {
+
+                    jq.ajax( {
+                        url     : assetCssFonts,
+                        success : function ( data ) {
+                            _b.appendStyle( data );
+                            _b.localStorage.setItem( 'bvSiteFonts', data );
+                        },
+                        dataType: 'text'
+                    } );
+
+                } );
+            }
+
+        }
+
+        if ( assetJsMain ) {
+
+            _b.load.js( assetJsMain );
+
+        }
+
+
+    }( window, document, jQuery, 'script', '$!{assetJsMain}', '$!{assetCssFonts}' ) );
+
+</script>

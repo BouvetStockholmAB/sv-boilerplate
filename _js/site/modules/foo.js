@@ -1,4 +1,4 @@
-/*global $svjq, console */
+/*global jQuery, console */
 
 ( function ( $ ) {
 
@@ -6,4 +6,4 @@
 
     console.log( 'jQuery is loaded: ' + !!$ );
 
-}( $svjq ) );
+}( jQuery ) );

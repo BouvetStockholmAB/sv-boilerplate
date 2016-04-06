@@ -1,4 +1,4 @@
-( function ( strPrototype ) {
+( function ( strPrototype, arrPrototype ) {
 
     'use strict';
 
@@ -33,5 +33,38 @@
             return this.charAt( 0 ).toUpperCase() + this.slice( 1 );
         };
     }
-    
-}( String.prototype ) );
+
+    if ( !arrPrototype.includes ) {
+        arrPrototype.includes = function ( searchElement /*, fromIndex*/ ) {
+
+            var Obj   = Object( this ),
+                len = parseInt( Obj.length ) || 0,
+                n = parseInt( arguments[ 1 ], 10 ) || 0,
+                k, currentElement;
+
+            if ( len === 0 ) {
+                return false;
+            }
+
+            if ( n >= 0 ) {
+                k = n;
+            } else {
+                k = len + n;
+                if ( k < 0 ) { k = 0; }
+            }
+
+            while ( k < len ) {
+                currentElement = Obj[ k ];
+                if ( searchElement === currentElement ||
+                     ( searchElement !== searchElement && currentElement !== currentElement ) ) {
+                    return true;
+                }
+                k += 1;
+            }
+
+            return false;
+            
+        };
+    }
+
+}( String.prototype, Array.prototype ) );

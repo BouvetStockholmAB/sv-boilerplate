@@ -23,7 +23,8 @@
         jscs          = require( 'gulp-jscs' ),
         uglify        = require( 'gulp-uglify' ),
         autoprefixer  = require( 'gulp-autoprefixer' ),
-        cssnano       = require( 'gulp-cssnano' );
+        cssnano       = require( 'gulp-cssnano' ),
+        minifyInline  = require( 'gulp-minify-inline' );
 
     //----- Helpers -----//
 
@@ -56,19 +57,20 @@
     };
 
     dir = {
-        dev     : '_dev',
-        dist    : 'dist',
-        sass    : '_sass',
-        images  : '_images/', // Must use ending slash!
-        fonts   : '_fonts',
-        hintedjs: '_js/site',
-        sitejs  : [
+        dev      : '_dev',
+        dist     : 'dist',
+        sass     : '_sass',
+        images   : '_images/', // Must use ending slash!
+        fonts    : '_fonts',
+        resources: '_resources/',
+        hintedjs : '_js/site',
+        sitejs   : [
             '_js/site/pre.js',
             '_js/site/modules/**/*.js',
             '_js/site/post.js'
         ],
-        temp    : '_temp',
-        vendorjs: [
+        temp     : '_temp',
+        vendorjs : [
             // '_js/vendor/fastclick.js',
             '_js/vendor/jquery-custom-plugins.js',
             '_js/vendor/polyfills.js'
@@ -76,15 +78,16 @@
     };
 
     files = {
-        sass    : 'main.scss',
-        css     : 'main.css',
-        cssmin  : 'main.min.css',
-        cssfonts: 'fonts.css',
-        lodash  : 'lodash.custom.js',
-        sitejs  : 'main-site.js',
-        vendorjs: 'main-vendor.js',
-        js      : 'main.js',
-        jsmin   : 'main.min.js'
+        sass          : 'main.scss',
+        css           : 'main.css',
+        cssmin        : 'main.min.css',
+        cssfonts      : 'fonts.css',
+        lodash        : 'lodash.custom.js',
+        sitejs        : 'main-site.js',
+        vendorjs      : 'main-vendor.js',
+        js            : 'main.js',
+        jsmin         : 'main.min.js',
+        additionalHead: 'additional-head-elements.vm'
     };
 
 
@@ -92,12 +95,12 @@
 
     gulp.task( 'build', [ 'imgoptimize', 'jsmin', 'cssmin', 'cssfonts' ], function () {
 
-        var destDir = options.dev ? 'dev' : 'dist',
+        var destDir        = options.dev ? 'dev' : 'dist',
             useCacheBuster = !!( options.rev && !options.dev ),
             timestamp      = _timestamp();
 
         del( [ path.join( dir.dist, '/**/*-*.js' ), path.join( dir.dist, '/**/*-*.css' ) ] );
-        
+
         console.log( useCacheBuster );
         console.log( 'Building ' + destDir );
 
@@ -243,6 +246,16 @@
                    .pipe( gulp.dest( dir.dev ) );
 
     } );
+
+
+    //----- Minifying JS in Velocity (HEAD) -----//
+
+    gulp.task( 'minify-head', function () {
+        gulp.src( path.join( dir.resources, files.additionalHead ) )
+            .pipe( minifyInline() )
+            .pipe( gulp.dest( dir.temp ) );
+    } );
+
 
     //----- Watch -----//
 
