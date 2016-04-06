@@ -25,6 +25,8 @@ image optimization and embedding and more.
    - [Embedded images](#embedded-images)
    - [Async font-face](#async-font-face)
    - [Sass](#sass)
+   - [Async JS](#async-js)
+   - [Init JS module](#init-js-module)
    - [Lodash](#lodash)
    - [Autoprefixer](#autoprefixer)
 
@@ -54,6 +56,7 @@ My setup is:
 - Images embedded (Base64 encoded) in CSS on demand.
 - Script concatention and minification.
 - Setup for async loading of font-face fonts embedded in separate CSS.
+- Setup for non-blocking async load of JavaScript file.
 - Custom [Lodash](https://lodash.com/) builds based on usage in JS-files available.
 - JSHint on build, .jshintrc for use by IDE.
 - JSCS on build, .jscsrc for use by IDE. Uses customized version of [jQuery JS Style Guide](https://contribute.jquery.org/style-guide/js/)
@@ -157,9 +160,9 @@ By using the function data-uri in your Sass code you may choose to embed an imag
 
 This is my prefered way of including font-face fonts. The advantage is that there will never be a blank screen while your fonts are loading. The fallback font will be visible first (on first page load only), then switched to the font-face font. With a good fallback, this will be quite invisible. On following requests, the font-face font will be stored in localStorage and applied immediately in head, so there will be no request at all.
 
-A script checks the script tag (`#js-main`) for an URL to a CSS file. The file is fetched asynchronously (AJAX) and stored in localStorage. On the next request we check if there is a file in localStorage and skip the request. The CSS file will have the font-face font embeded as Base64.
+The script loader (see [Async JS](#async-js)) will trigger loading of the font CSS file if it exists in metadata. The file is fetched asynchronously (AJAX) and stored in localStorage. On the next request we check if there is CSS in localStorage and, if so, skip the request. The CSS file will have the font-face font embedded as Base64.
 
-- fonts.css must be uploaded to the SiteVision server. It is fetched with AJAX so it must be on the same domain as the visited page.
+- fonts.css must always be uploaded to the SiteVision server. It is fetched with AJAX so it must be on the same domain as the visited page.
 
 
 ### Sass 
@@ -174,6 +177,27 @@ Some stuff included:
 - `data-uri` function for embedding image assets
 - `em` and `rem` helper functions  
 - Example on how to use same background multiple times with only one include (see `_bgimg-extends.scss`)
+
+
+### Async JS
+
+The main JS file will be loaded asynchronously. The load is triggered inline in head. That means you don't know if the JS will be executed before or after DOMContentLoaded, and have to write your JS accordingly.
+
+The advantage with this model is that there will be no blocking JS request. The script that triggers the load is inlined and the JS file is async, so the only file that is blocking the page load in head is the main CSS file.
+
+
+### Init JS module
+
+Modules (functions) in your JS that you want to invoke on certain pages should be initialized from the HTML. 
+
+Example:
+
+Put this anywhere in the HTML body:
+`<script> _b.init.push( 'BV.fooBar' ) </script>`
+
+On DOMContentLoaded or when the main script file has finished loading (whichever occurs last), the function BV.fooBar will be invoked.
+
+
 
 ### Lodash
 
