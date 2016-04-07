@@ -6,12 +6,12 @@
  * Set up a decent box model on the root element
  */
 html {
-  font: -apple-system-body;
-  -ms-text-size-adjust: 100%;
-  -webkit-text-size-adjust: 100%;
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+    font: -apple-system-body;
+    -ms-text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
 }
 
 /**
@@ -21,18 +21,7 @@ html {
  * See: https://css-tricks.com/inheriting-box-sizing-probably-slightly-better-best-practice/
  */
 *, *::before, *::after {
-  box-sizing: inherit;
-} 
-
-/**
- * Basic styles for links
- */
-a {
-  color: $brand-color;
-  text-decoration: none;
-
-  @include on-event {
-    color: $text-color;
-    text-decoration: underline;
-  }
+    box-sizing: inherit;
 }
+
+

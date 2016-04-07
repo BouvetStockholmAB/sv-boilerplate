@@ -3,27 +3,27 @@
 // -----------------------------------------------------------------------------
 
 @function rem( $px, $isFontSize: false ) {
-  $rem: ( $px / 16px ) * 1rem;
-  @if ($isFontSize) {
-    @return unquote($px + "; font-size: " + $rem);
-  }
-  @return $rem;
+    $rem: ( $px / 16px ) * 1rem;
+    @if ($isFontSize) {
+        @return unquote($px + "; font-size: " + $rem);
+    }
+    @return $rem;
 }
 
 @function em( $px, $base: 16px ) {
-  $em: ( $px / $base ) * 1em;
-  @return $em;
+    $em: ( $px / $base ) * 1em;
+    @return $em;
 }
 
 @function lineHeight( $px, $base: 16px ) {
-  $number: ($px / $base);
-  @if type-of($number) == 'number' and not unitless($number) {
-    @return $number / ($number * 0 + 1);
-  }
-  @return $number;
+    $number: ($px / $base);
+    @if type-of($number) == 'number' and not unitless($number) {
+        @return $number / ($number * 0 + 1);
+    }
+    @return $number;
 }
 
 @function data-uri( $file ) {
-  @return unquote("url('" + $file + "', true)"); // Force Base 64!
+    @return unquote("url('" + $file + "', true)"); // Force Base 64!
 }
 

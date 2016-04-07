@@ -7,72 +7,71 @@
 /// @param {Bool} $self [false] - Whether or not to include current selector
 /// @link https://twitter.com/csswizardry/status/478938530342006784 Original tweet from Harry Roberts
 @mixin on-event($self: false) {
-  @if $self {
-    &,
-    &:hover,
-    &:active,
-    &:focus {
-      @content;
+    @if $self {
+        &,
+        &:hover,
+        &:active,
+        &:focus {
+            @content;
+        }
+    } @else {
+        &:hover,
+        &:active,
+        &:focus {
+            @content;
+        }
     }
-  } @else {
-    &:hover,
-    &:active,
-    &:focus {
-      @content;
-    }
-  }
 }
 
 /// Make a context based selector a little more friendly
 /// @author Hugo Giraudel
 /// @param {String} $context
 @mixin when-inside($context) {
-  #{$context} & {
-    @content;
-  }
+    #{$context} & {
+        @content;
+    }
 }
-
 
 /// @author Henrik Ekelöf
 @mixin listReset {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
 }
 
 /// @author Henrik Ekelöf
 @mixin imageReplace( $w, $h ) {
-  display: block;
-  width: $w;
-  height: 0;
-  padding-top: $h;
-  background-position: 0 0;
-  background-repeat: no-repeat;
-  background-size: $w auto;
-  overflow: hidden;
+    display: block;
+    width: $w;
+    height: 0;
+    padding-top: $h;
+    background-position: 0 0;
+    background-repeat: no-repeat;
+    background-size: $w auto;
+    overflow: hidden;
 }
 
 /// @author Henrik Ekelöf
 @mixin editMode() {
-  .sv-edit-mode &,
-  .sv-editing-mode &,
-  .sv-classic-edit-mode & {
-    @content;
-  }
+    .sv-edit-mode &,
+    .sv-editing-mode &,
+    .sv-classic-edit-mode & {
+        @content;
+    }
 }
 
 /// @author Henrik Ekelöf
 @mixin placeholder() {
-  &::-webkit-input-placeholder { /* Chrome/Opera/Safari */
-    @content;
-  }
-  &::-moz-placeholder { /* Firefox 19+ */
-    @content;
-  }
-  &:-ms-input-placeholder { /* IE 10+ */
-    @content;
-  }
-  &:-moz-placeholder { /* Firefox 18- */
-    @content;
-  }
+    &::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+        @content;
+    }
+    &::-moz-placeholder { /* Firefox 19+ */
+        @content;
+    }
+    &:-ms-input-placeholder { /* IE 10+ */
+        @content;
+    }
+    &:-moz-placeholder { /* Firefox 18- */
+        @content;
+    }
 }

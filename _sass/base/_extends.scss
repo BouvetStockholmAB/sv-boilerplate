@@ -7,11 +7,8 @@
         &:visited {
 
         }
-        &:hover, &:focus {
+        @include on-event {
             text-decoration: underline;
-        }
-        &:active {
-
         }
     }
 }
@@ -25,11 +22,8 @@
         &:visited {
 
         }
-        &:hover, &:focus {
+        @include on-event {
             text-decoration: underline;
-        }
-        &:active {
-
         }
     }
 }
