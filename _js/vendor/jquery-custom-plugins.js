@@ -1,7 +1,23 @@
 /*global jQuery */
 
+// ==|== Check if var is jQuery object ========================================================== //
 
-// ==|== Prettier Vertical Visbility Toggler ==================================================== //
+( function ( $ ) {
+
+    'use strict';
+
+    // Pretty show/hide animation, height and opacity
+    if ( !$.isjQueryObject ) {
+        $.isjQueryObject = function ( obj ) {
+            return ( obj && ( obj instanceof jQuery || 'jquery' in Object( obj ) ) );
+        };
+    }
+
+}( jQuery ) );
+
+
+
+// ==|== Prettier Vertical Visibility Toggler =================================================== //
 
 ( function ( $ ) {
 

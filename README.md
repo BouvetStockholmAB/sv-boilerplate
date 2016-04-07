@@ -78,6 +78,7 @@ My setup is:
 
 - Clone (or update) Boilerplate repo
 - Copy files to new project repo
+- Delete this README and rename Project-example-README.md to README.md. This is what will show up on GitHub. Edit the file to fit the project.
 
 ### Edit project files
 

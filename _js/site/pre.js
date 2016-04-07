@@ -7,9 +7,7 @@
  * should be placed under this namespace.
  */
 var BV = BV || {},
-    /**
-     * Toolbox Library
-     */
+    // Toolbox Library
     _b = _b || {};
 
 

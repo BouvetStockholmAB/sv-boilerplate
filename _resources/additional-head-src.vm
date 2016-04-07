@@ -1,3 +1,12 @@
+
+## NOTE:
+##
+## additional-head-elements.min.vm is minified on build.
+## Changes in the minified file will be overwritten.
+##
+## Edit additional-head-elements.vm only, never additional-head-elements.min.vm
+##
+
 #set ($currentPage = $sitevisionUtils.getPortletContextUtil().getCurrentPage())
 #set ($propertyUtil = $sitevisionUtils.getPropertyUtil())
 #set ($session = $request.getSession())

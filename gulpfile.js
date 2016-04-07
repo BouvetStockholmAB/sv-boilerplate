@@ -71,29 +71,30 @@
         ],
         temp     : '_temp',
         vendorjs : [
-            // '_js/vendor/fastclick.js',
+            '_js/vendor/polyfills.js',
             '_js/vendor/jquery-custom-plugins.js',
-            '_js/vendor/polyfills.js'
+            // '_js/vendor/fastclick.js',
         ]
     };
 
     files = {
-        sass          : 'main.scss',
-        css           : 'main.css',
-        cssmin        : 'main.min.css',
-        cssfonts      : 'fonts.css',
-        lodash        : 'lodash.custom.js',
-        sitejs        : 'main-site.js',
-        vendorjs      : 'main-vendor.js',
-        js            : 'main.js',
-        jsmin         : 'main.min.js',
-        additionalHead: 'additional-head-elements.vm'
+        sass     : 'main.scss',
+        css      : 'main.css',
+        cssmin   : 'main.min.css',
+        cssfonts : 'fonts.css',
+        lodash   : 'lodash.custom.js',
+        sitejs   : 'main-site.js',
+        vendorjs : 'main-vendor.js',
+        js       : 'main.js',
+        jsmin    : 'main.min.js',
+        headvm   : 'additional-head-src.vm',
+        headvmmin: 'additional-head-min.vm'
     };
 
 
     //----- Build for prod -----//
 
-    gulp.task( 'build', [ 'imgoptimize', 'jsmin', 'cssmin', 'cssfonts' ], function () {
+    gulp.task( 'build', [ 'imgoptimize', 'jsmin', 'minify-head', 'cssmin', 'cssfonts' ], function () {
 
         var destDir        = options.dev ? 'dev' : 'dist',
             useCacheBuster = !!( options.rev && !options.dev ),
@@ -251,9 +252,10 @@
     //----- Minifying JS in Velocity (HEAD) -----//
 
     gulp.task( 'minify-head', function () {
-        gulp.src( path.join( dir.resources, files.additionalHead ) )
+        gulp.src( path.join( dir.resources, files.headvm ) )
+            .pipe( rename( files.headvmmin ) )
             .pipe( minifyInline() )
-            .pipe( gulp.dest( dir.temp ) );
+            .pipe( gulp.dest( dir.resources ) );
     } );
 
 

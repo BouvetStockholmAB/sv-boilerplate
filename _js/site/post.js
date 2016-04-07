@@ -1,16 +1,11 @@
-/*global FastClick, _b */
+/*global jQuery, FastClick, _b */
 
 
 // ==|== FastClick ============================================================================== //
 
-( function ( d ) {
+( function ( d, $ ) {
 
     'use strict';
-
-    if ( !d.querySelectorAll || !d.addEventListener ) {
-        // Testing for addEventListener to make early exit in old IE (8).
-        return;
-    }
 
     _b.attachFastClick = function ( elms ) {
 
@@ -18,14 +13,12 @@
 
         function attachFastClick( el ) {
 
-            if ( !_b.isPlainObject( el ) ) {
+            if ( $.isjQueryObject( el ) ) {
+                // jQuery object - make recursive call for each node.
+                el.each( function ( i, e ) { attachFastClick( e ); } );
                 return;
             }
-            if ( el.nodeType === 1 ) {
-                // Single element
-                FastClick.attach( el );
-                return;
-            }
+
             if ( el.length ) {
                 // NodeList - make recursive call for each node.
                 for ( i = 0, j = el.length; i < j; i += 1 ) {
@@ -34,22 +27,33 @@
                 return;
             }
 
+            if ( el.nodeType === 1 ) {
+                // Single element. Attach FastClick.
+                FastClick.attach( el );
+            }
+
         }
 
-        // Must be a DOM node or nodeList - no jQuery objects please.
-        elms.forEach( attachFastClick );
+        if ( elms.length ) {
+            elms.forEach( attachFastClick );
+        } else {
+            attachFastClick( elms );
+        }
 
     };
 
-    _b.init( function () {
+    /*
 
-        //_b.attachFastClick( [
-        //    d.querySelector( '.hamburger' ),
-        //    d.querySelector( '.searchBox__submit' ),
-        //    d.querySelector( '.paginationButton__button' )
-        //] );
+    // Uncomment to use, also make sure fastclick.js is included in gulpfile.js.
 
+    $( function () {
+        _b.attachFastClick( [
+            d.querySelector( '.hamburger' ),
+            $( '.searchBox__submit' )
+        ] );
     } );
 
-}( document ) );
+    */
+    
+}( document, jQuery ) );
 
