@@ -33,11 +33,19 @@
     }
 
     function _getArg( key ) {
-        //    gulp watch --foo --bar 1337 -boom "Foo isn't equal to bar."
-        //    _getArg( '--foo ' ) // => true
-        //    _getArg( '--bar ' ) // => "1337"
-        //    _getArg( '-boom ' ) // => "Foo isn't equal to bar."
-        //    _getArg( '--404 ' ) // => null
+        /**
+         * Get command arguments
+         *
+         * @example
+         *
+         * $ gulp watch --foo --bar 1337 -boom "Foo isn't equal to bar."
+         *
+         * _getArg( '--foo ' ) // => true
+         * _getArg( '--bar ' ) // => "1337"
+         * _getArg( '-boom ' ) // => "Foo isn't equal to bar."
+         * _getArg( '--404 ' ) // => null
+         *
+         */
         var index = process.argv.indexOf( key ),
             next  = process.argv[ index + 1 ];
         return ( index < 0 ) ? null : ( !next || next[ 0 ] === '-' ) ? true : next;
