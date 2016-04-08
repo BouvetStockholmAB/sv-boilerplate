@@ -102,7 +102,7 @@
 
     //----- Build for prod -----//
 
-    gulp.task( 'build', [ 'imgoptimize', 'jsmin', 'minify-head', 'cssmin', 'cssfonts' ], function () {
+    gulp.task( 'build', [ 'imgoptimize', 'js-build-min', 'minify-head', 'css-build-min', 'fontcss-build' ], function () {
 
         var destDir        = options.dev ? 'dev' : 'dist',
             useCacheBuster = !!( options.rev && !options.dev ),
@@ -146,19 +146,19 @@
             } ) );
     }
 
-    gulp.task( 'css', function () {
+    gulp.task( 'css-build', function () {
         return buildCss( gulp.src( path.join( dir.sass, files.sass ) ) )
             .pipe( gulp.dest( dir.dev ) );
     } );
 
-    gulp.task( 'cssmin', [ 'css' ], function () {
+    gulp.task( 'css-build-min', [ 'css-build' ], function () {
         return gulp.src( [ _devDir( files.css ) ] )
                    .pipe( rename( files.cssmin ) )
                    .pipe( cssnano() )
                    .pipe( gulp.dest( dir.dev ) );
     } );
 
-    gulp.task( 'cssfonts', function () {
+    gulp.task( 'fontcss-build', function () {
         return gulp.src( path.join( dir.fonts, files.cssfonts ) )
                    .pipe( file2base64() )
                    .pipe( gulp.dest( dir.dev ) );
@@ -191,7 +191,7 @@
                    .pipe( jscs.reporter() );
     } );
 
-    gulp.task( 'lodash', function () {
+    gulp.task( 'lodash-build', function () {
         return gulp.src( dir.sitejs, {
                        buffer: false
                    } )
@@ -204,7 +204,7 @@
                    } );
     } );
 
-    gulp.task( 'vendorjs', function () {
+    gulp.task( 'vendorjs-concat', function () {
         // Add lodash to lib build
         var vendorjs = dir.vendorjs;
         // vendorjs.unshift( path.join( dir.temp, files.lodash ) );
@@ -213,13 +213,13 @@
                    .pipe( gulp.dest( dir.dev ) );
     } );
 
-    gulp.task( 'sitejs', function () {
+    gulp.task( 'sitejs-concat', function () {
         return gulp.src( dir.sitejs )
                    .pipe( concat( files.sitejs ) )
                    .pipe( gulp.dest( dir.dev ) );
     } );
 
-    gulp.task( 'js', [ 'sitejs', 'lodash', 'vendorjs' ], function () {
+    gulp.task( 'alljs-concat', [ 'sitejs-concat', 'lodash-build', 'vendorjs-concat' ], function () {
         return gulp.src( [
                        _devDir( files.vendorjs ),
                        _devDir( files.sitejs )
@@ -228,7 +228,7 @@
                    .pipe( gulp.dest( dir.dev ) );
     } );
 
-    gulp.task( 'jsdev', [ 'sitejs' ], function () {
+    gulp.task( 'js-build-dev', [ 'sitejs-concat' ], function () {
         return gulp.src( [
                        _devDir( files.vendorjs ),
                        _devDir( files.sitejs )
@@ -237,7 +237,7 @@
                    .pipe( gulp.dest( dir.dev ) );
     } );
 
-    gulp.task( 'jsvendor', [ 'vendorjs' ], function () {
+    gulp.task( 'vendorjs-build-dev', [ 'vendorjs-concat' ], function () {
         return gulp.src( [
                        _devDir( files.vendorjs ),
                        _devDir( files.sitejs )
@@ -246,7 +246,7 @@
                    .pipe( gulp.dest( dir.dev ) );
     } );
 
-    gulp.task( 'jsmin', [ 'jshint', 'jscs', 'js' ], function () {
+    gulp.task( 'js-build-min', [ 'jshint', 'jscs', 'alljs-concat' ], function () {
         return gulp.src( [
                        _devDir( files.js )
                    ] )
@@ -276,10 +276,10 @@
         } );
     } );
 
-    gulp.task( 'watch', [ 'css', 'js', 'connect' ], function () {
-        gulp.watch( path.join( dir.hintedjs, '/**/*.js' ), [ 'jsdev' ] );
-        gulp.watch( dir.vendorjs, [ 'jsvendor' ] );
-        gulp.watch( path.join( dir.sass, '/**/*.scss' ), [ 'css' ] );
+    gulp.task( 'watch', [ 'css-build', 'alljs-concat', 'connect' ], function () {
+        gulp.watch( path.join( dir.hintedjs, '/**/*.js' ), [ 'js-build-dev' ] );
+        gulp.watch( dir.vendorjs, [ 'vendorjs-build-dev' ] );
+        gulp.watch( path.join( dir.sass, '/**/*.scss' ), [ 'css-build' ] );
     } );
 
     gulp.task( 'default', [ 'watch' ] );
