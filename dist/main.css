@@ -373,16 +373,6 @@ html {
 *, *::before, *::after {
   box-sizing: inherit; }
 
-/**
- * Basic styles for links
- */
-a {
-  color: #e50050;
-  text-decoration: none; }
-  a:hover, a:active, a:focus {
-    color: #222222;
-    text-decoration: underline; }
-
 .foo {
   background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNyAxNC45NiIgd2lkdGg9IjE3IiBoZWlnaHQ9IjE1Ij48cGF0aCBkPSJNMTYuMTEgNi4zNmE0LjExIDQuMTEgMCAxIDAtNy40My0zLjUgMi45IDIuOSAwIDAgMC0uMTguNTMgMi44NiAyLjg2IDAgMCAwLS4xOC0uNTMgNC4xMSA0LjExIDAgMSAwLTcuNDMgMy41YzEgMi4wNSA3LjYgNy45NCA3LjYgNy45NHM2LjY1LTUuODggNy42MS03Ljk0eiIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjYWZhZmFmIi8+PC9zdmc+); }
 
@@ -417,3 +407,6 @@ a {
   margin: -1px;
   padding: 0;
   border: 0; }
+
+p {
+  color: red !important; }

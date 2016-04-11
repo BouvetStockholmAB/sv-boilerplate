@@ -1,7 +1,93 @@
-/*global $svjq */
+( function ( strPrototype, arrPrototype ) {
+
+    'use strict';
 
 
-// ==|== Prettier Vertical Visbility Toggler ==================================================== //
+    if ( !strPrototype.startsWith ) {
+        strPrototype.startsWith = function ( str ) {
+            return this.slice( 0, str.length ) === str;
+        };
+    }
+
+    if ( !strPrototype.endsWith ) {
+        strPrototype.endsWith = function ( str ) {
+            return this.slice( -str.length ) === str;
+        };
+    }
+
+    if ( !strPrototype.includes ) {
+        strPrototype.includes = function ( search, start ) {
+            if ( typeof start !== 'number' ) {
+                start = 0;
+            }
+            if ( start + search.length > this.length ) {
+                return false;
+            } else {
+                return this.indexOf( search, start ) !== -1;
+            }
+        };
+    }
+
+    if ( !strPrototype.capitalize ) {
+        strPrototype.capitalize = function () {
+            return this.charAt( 0 ).toUpperCase() + this.slice( 1 );
+        };
+    }
+
+    if ( !arrPrototype.includes ) {
+        arrPrototype.includes = function ( searchElement /*, fromIndex*/ ) {
+
+            var Obj   = Object( this ),
+                len = parseInt( Obj.length ) || 0,
+                n = parseInt( arguments[ 1 ], 10 ) || 0,
+                k, currentElement;
+
+            if ( len === 0 ) {
+                return false;
+            }
+
+            if ( n >= 0 ) {
+                k = n;
+            } else {
+                k = len + n;
+                if ( k < 0 ) { k = 0; }
+            }
+
+            while ( k < len ) {
+                currentElement = Obj[ k ];
+                if ( searchElement === currentElement ||
+                     ( searchElement !== searchElement && currentElement !== currentElement ) ) {
+                    return true;
+                }
+                k += 1;
+            }
+
+            return false;
+            
+        };
+    }
+
+}( String.prototype, Array.prototype ) );
+/*global jQuery */
+
+// ==|== Check if var is jQuery object ========================================================== //
+
+( function ( $ ) {
+
+    'use strict';
+
+    // Pretty show/hide animation, height and opacity
+    if ( !$.isjQueryObject ) {
+        $.isjQueryObject = function ( obj ) {
+            return ( obj && ( obj instanceof jQuery || 'jquery' in Object( obj ) ) );
+        };
+    }
+
+}( jQuery ) );
+
+
+
+// ==|== Prettier Vertical Visibility Toggler =================================================== //
 
 ( function ( $ ) {
 
@@ -25,7 +111,7 @@
         };
     }
 
-}( $svjq ) );
+}( jQuery ) );
 
 
 // ==|== Exists Function ======================================================================== //
@@ -46,183 +132,10 @@
         };
     }
 
-}( $svjq ) );
+}( jQuery ) );
 
 
-/*
- https://github.com/imaustink/swiss-army-knife
- Created by Austin Kurpuis (imaustink, blackmarket, DabMan...)
- This file is open source and free for use to anyone for anything
- have fun and code smart!
-
- Hinted and customized by Henrik Ekelöf 2016-04-01
-
- */
-
-( function () {
-
-    'use strict';
-
-    //Array.forEach in IE 5+
-    if ( !Array.prototype.forEach ) {
-        Array.prototype.forEach = function ( callback, thisArg ) {
-            if ( thisArg ) {
-                callback.call( thisArg );
-            }
-            for ( var i = 0; i < this.length; i++ ) {
-                callback( this[ i ], i, this );
-            }
-        };
-    }
-
-    // Array.each is simlar to Array.forEach but with ability
-    // to break by returning false in callback
-    if ( !Array.prototype.each ) {
-        Array.prototype.each = function ( callback, thisArg ) {
-            var i;
-            if ( thisArg ) {
-                callback.call( thisArg );
-            }
-            for ( i = 0; i < this.length; i += 1 ) {
-                if ( callback( this[ i ], i, this ) === false ) {
-                    break;
-                }
-            }
-        };
-    }
-
-    // Array.every in IE 5+
-    if ( !Array.prototype.every ) {
-        Array.prototype.every = function ( callback, thisArg ) {
-            var found = true,
-                i;
-            if ( thisArg ) {
-                callback.call( thisArg );
-            }
-            for ( i = 0; i < this.length; i += 1 ) {
-                if ( !callback( this[ i ], i ) ) {
-                    found = false;
-                }
-            }
-            return found;
-        };
-    }
-
-    // Array.some in IE 5+
-    if ( !Array.prototype.some ) {
-        Array.prototype.some = function ( callback, thisArg ) {
-            var found = false,
-                i;
-            if ( thisArg ) {
-                callback.call( thisArg );
-            }
-            for ( i = 0; i < this.length; i += 1 ) {
-                if ( callback( this[ i ], i ) ) {
-                    found = true;
-                }
-            }
-            return found;
-        };
-    }
-
-    // Array.indexOf in IE 5+
-    if ( !Array.prototype.indexOf ) {
-        Array.prototype.indexOf = function ( value, start ) {
-            var index = -1,
-                i;
-            for ( i = ( start ? start : 0 ); i < this.length; i += 1 ) {
-                if ( this[ i ] === value ) {
-                    index = i;
-                    break;
-                }
-            }
-            return index;
-        };
-    }
-
-    // Array.lastIndexOf in IE 5+
-    if ( !Array.prototype.lastIndexOf ) {
-        Array.prototype.lastIndexOf = function ( value, start ) {
-            var index = -1,
-                i;
-            for ( i = ( start ? start : this.length - 1 ); i > 0; i -= 1 ) {
-                if ( this[ i ] === value ) {
-                    index = i;
-                    break;
-                }
-            }
-            return index;
-        };
-    }
-
-    // Object.keys in IE 5+
-    if ( !Object.keys ) {
-        Object.keys = function ( obj ) {
-            var keys = [], key;
-            for ( key in obj ) {
-                if ( obj.hasOwnProperty( key ) ) {
-                    keys.push( key );
-                }
-            }
-            return keys;
-        };
-    }
-
-    // Object.clone
-    if ( !Object.clone ) {
-        Object.clone = function ( obj ) {
-            if ( null === obj || 'object' !== typeof obj ) {
-                return obj;
-            }
-            var copy = {},
-                attr, prop;
-            for ( attr in obj ) {
-                if ( obj.hasOwnProperty( attr ) ) {
-                    prop = obj[ attr ];
-                    if ( typeof prop === 'object' ) {
-                        if ( Array.isArray( prop ) ) {
-                            prop = prop.slice();
-                        } else {
-                            prop = Object.clone( prop );
-                        }
-                    }
-                    copy[ attr ] = prop;
-                }
-            }
-            return copy;
-        };
-    }
-
-    // Array.isArray in IE 5+
-    if ( !Array.isArray ) {
-        Array.isArray = function ( a ) {
-            return ( Object.prototype.toString.call( a ) === '[object Array]' );
-        };
-    }
-
-    // Get largest value in array
-    if ( !Array.prototype.max ) {
-        Array.prototype.max = function () {
-            return Math.max.apply( Math, this );
-        };
-    }
-
-    // Get smallest value in array
-    if ( !Array.prototype.min ) {
-        Array.prototype.min = function () {
-            return Math.min.apply( Math, this );
-        };
-    }
-
-    // Capitalize first letter
-    if ( !String.prototype.capitalize ) {
-        String.prototype.capitalize = function () {
-            return this.charAt( 0 ).toUpperCase() + this.slice( 1 );
-        };
-    }
-    
-}() );
-/*global $svjq */
+/*global jQuery */
 
 // ==|== Global Namespace Variables ============================================================= //
 
@@ -231,9 +144,7 @@
  * should be placed under this namespace.
  */
 var BV = BV || {},
-    /**
-     * Toolbox Library
-     */
+    // Toolbox Library
     _b = _b || {};
 
 
@@ -331,31 +242,6 @@ _b.throttle = function ( fn, threshhold, scope ) {
 
 }() );
 
-// ==|== Custom localStorage function w. detection ============================================== //
-
-( function ( w ) {
-
-    'use strict';
-
-    _b.localStorage = ( function () {
-
-        var uid = new Date().toString(),
-            result;
-
-        try {
-            w.localStorage.setItem( uid, uid );
-            result = w.localStorage.getItem( uid ) === uid;
-            w.localStorage.removeItem( uid );
-            return result && w.localStorage;
-        } catch ( exception ) {
-        }
-
-    }() );
-
-    _b.sessionStorage = _b.localStorage ? w.sessionStorage : false;
-
-}( window ) );
-
 
 // ==|== Check for edit mode ==================================================================== //
 
@@ -373,7 +259,7 @@ _b.throttle = function ( fn, threshhold, scope ) {
     } );
 
 
-}( $svjq ) );
+}( jQuery ) );
 
 
 
@@ -395,215 +281,88 @@ _b.cutsTheMustard = (
 );
 
 
-// ==|== Load JS and CSS assets ================================================================= //
-
-( function ( doc, s ) {
-
-    'use strict';
-
-    _b.load = {
-        /**
-         * Load JavaScript file async by adding script tag to DOM.
-         * May be used for own scripts or external scripts.
-         * <script> NRM.load.js( 'some-js-file.js' ) </script>
-         * // => Loads and executes some-js-file.js
-         */
-        js: function ( src, beforeEl ) {
-            var script = doc.createElement( s );
-            beforeEl   = beforeEl || doc.getElementsByTagName( s )[ 0 ];
-            script.src = src;
-            beforeEl.parentNode.insertBefore( script, beforeEl );
-            return script;
-        }
-    };
-
-    _b.appendStyleElement = function ( data ) {
-        var style;
-        style = doc.createElement( 'style' );
-        style.setAttribute( 'type', 'text/css' );
-        if ( style.styleSheet ) {
-            style.styleSheet.cssText = data;
-        } else {
-            style.appendChild( doc.createTextNode( data ) );
-        }
-        doc.head.appendChild( style );
-    };
-
-}( document, 'script' ) );
-
-
-// ==|== Font-face loader ======================================================================= //
-
-( function ( win, doc, $ ) {
-
-    'use strict';
-
-    var fontCss;
-
-    if ( !_b.localStorage ) {
-        return;
-    }
-
-    function getFontCss() {
-
-        var fileName = doc.getElementById( 'js-main' ).getAttribute( 'data-fonts' );
-
-        $.ajax( {
-            url     : fileName,
-            success : function ( data ) {
-                _b.appendStyleElement( data );
-                _b.localStorage.setItem( 'bvSiteFonts', data );
-            },
-            dataType: 'text'
-        } );
-
-    }
-
-    fontCss = _b.localStorage.getItem( 'bvSiteFonts' );
-
-    if ( fontCss ) {
-        _b.appendStyleElement( fontCss );
-    } else {
-        $( getFontCss );
-    }
-
-}( window, document, $svjq ) );
-
-
 
 // ==|== Add to init and exec on DOMContentLoaded =============================================== //
 
-( function ( win, doc, undefined ) {
+
+/**
+ * Add functions or function names for functions to be executed on DOMContentLoaded.
+ * Use inline in markup. Modules will tell the script which functions
+ * need to be executed for the current page.
+ * Pass as string to ensure function to only be executed once.
+ *
+ * <script> _b.init.push( 'M.fooBar' ) </script>
+ * // => will execute M.foobar on DOMContentLoaded
+ *
+ * <script> _b.init.push( function () { alert( 'Hello' ) } ) </script>
+ * // => will alert 'Hello' on DOMContentLoaded
+ */
+
+
+( function ( win, doc, $, undefined ) {
 
     'use strict';
 
-    var functions       = [],
-        functionsCalled = [],
-        currentFunction,
-        isInitiated     = false;
-
-    function isNamedFunction( fn ) {
-        var fName = fn.toString().match( /^function\s*([^\s]+)\s*\(\)/ );
-        if ( fName ) {
-            fName = fName[ 1 ];
-        }
-        return !!fName;
-    }
-
-    function include( fn ) {
-        if ( isNamedFunction( fn ) ) {
-            doc.addEventListener( 'DOMContentLoaded', fn );
-        } else {
-            functions.push( fn );
-        }
-    }
-
+    var functionsCalled = [];
 
     function getFunction( fn ) {
 
-        if ( typeof fn === 'function' ) {
-            return fn;
-        }
-
         var parts = fn.split( '.' ),
-            i,
-            l;
+            currentFunction = window,
+            i, l;
 
         for ( i = 0, l = parts.length; i < l; i += 1 ) {
-
             if ( !currentFunction[ parts[ i ] ] ) {
                 return undefined;
             } else {
                 currentFunction = currentFunction[ parts[ i ] ];
             }
         }
-        return currentFunction;
-    }
 
-
-    function exec( fns ) {
-
-        var fn, i, l;
-
-        fns = fns || functions;
-
-        for ( i = 0, l = fns.length; i < l; i += 1 ) {
-
-            currentFunction = win;
-
-            if ( _b.isString( fns[ i ] ) && functionsCalled.indexOf( fns[ i ] ) === -1 ) {
-
-                functionsCalled.push( fns[ i ] );
-                fn = getFunction( fns[ i ] );
-
-                if ( typeof fn === 'function' ) {
-                    fn();
-                }
-
-            }
+        if ( _b.isFunction( currentFunction ) ) {
+            return currentFunction;
         }
 
     }
 
 
-    /**
-     * Add function names for functions to be executed on DOMContentLoaded.
-     * Use inline in markup. Modules will tell the script which functions
-     * need to be executed for the current page.
-     * Any named function may be added multiple times but will only
-     * be executed once
-     *
-     * <script> _b.init( 'M.fooBar' ) </script>
-     * // => will execute M.foobar on DOMContentLoaded
-     *
-     * <script> _b.init( function () { alert( 'Hello' ) } ) </script>
-     * // => will alert 'Hello' on DOMContentLoaded
-     */
-    _b.init = function ( fn ) {
+    function exec( f ) {
 
-        if ( isInitiated ) {
-            if ( _b.isString( fn ) ) {
-                exec( [ fn ] );
-            } else if ( typeof ( fn ) === 'function' ) {
-                fn();
-            }
-
+        if ( _b.isArray( f ) ) {
+            f.forEach( exec );
             return;
         }
 
-        if ( !fn || ( _b.isPlainObject( fn ) && fn.target ) ) {
-            if ( functions.length > 0 ) {
-                exec();
+        if ( _b.isString( f ) ) {
+            if ( functionsCalled.includes( f ) ) {
+                return;
             }
-            isInitiated = true;
-            return;
+            functionsCalled.push( f );
+            f = getFunction( f );
         }
 
-        if ( _b.isString( fn ) || typeof ( fn ) === 'function' ) {
-            include( fn );
-        } else if ( _b.isArray( fn ) ) {
-            fn.forEach( function ( f ) {
-                include( f );
-            } );
+        if ( _b.isFunction( f ) ) {
+            f();
         }
 
-    };
-
-    //    _b.inInit = function ( s ) {
-    //        return ( functions.indexOf( s ) > -1 || functionsCalled.indexOf( s ) > -1 );
-    //    };
-
-    doc.addEventListener( 'DOMContentLoaded', _b.init );
-
-}( window, document ) );
+    }
 
 
+    $( function () {
+        if ( _b.init.length > 0 ) {
+            _b.init.forEach( exec );
+        }
+    } );
 
+}( window, document, jQuery ) );
 
 
 
 
-/*global $svjq, console */
+
+
+
+/*global jQuery, console */
 
 ( function ( $ ) {
 
@@ -611,20 +370,15 @@ _b.cutsTheMustard = (
 
     console.log( 'jQuery is loaded: ' + !!$ );
 
-}( $svjq ) );
-/*global FastClick, _b */
+}( jQuery ) );
+/*global jQuery, FastClick, _b */
 
 
 // ==|== FastClick ============================================================================== //
 
-( function ( d ) {
+( function ( d, $ ) {
 
     'use strict';
-
-    if ( !d.querySelectorAll || !d.addEventListener ) {
-        // Testing for addEventListener to make early exit in old IE (8).
-        return;
-    }
 
     _b.attachFastClick = function ( elms ) {
 
@@ -632,14 +386,12 @@ _b.cutsTheMustard = (
 
         function attachFastClick( el ) {
 
-            if ( !_b.isPlainObject( el ) ) {
+            if ( $.isjQueryObject( el ) ) {
+                // jQuery object - make recursive call for each node.
+                el.each( function ( i, e ) { attachFastClick( e ); } );
                 return;
             }
-            if ( el.nodeType === 1 ) {
-                // Single element
-                FastClick.attach( el );
-                return;
-            }
+
             if ( el.length ) {
                 // NodeList - make recursive call for each node.
                 for ( i = 0, j = el.length; i < j; i += 1 ) {
@@ -648,22 +400,33 @@ _b.cutsTheMustard = (
                 return;
             }
 
+            if ( el.nodeType === 1 ) {
+                // Single element. Attach FastClick.
+                FastClick.attach( el );
+            }
+
         }
 
-        // Must be a DOM node or nodeList - no jQuery objects please.
-        elms.forEach( attachFastClick );
+        if ( elms.length ) {
+            elms.forEach( attachFastClick );
+        } else {
+            attachFastClick( elms );
+        }
 
     };
 
-    _b.init( function () {
+    /*
 
-        //_b.attachFastClick( [
-        //    d.querySelector( '.hamburger' ),
-        //    d.querySelector( '.searchBox__submit' ),
-        //    d.querySelector( '.paginationButton__button' )
-        //] );
+    // Uncomment to use, also make sure fastclick.js is included in gulpfile.js.
 
+    $( function () {
+        _b.attachFastClick( [
+            d.querySelector( '.hamburger' ),
+            $( '.searchBox__submit' )
+        ] );
     } );
 
-}( document ) );
+    */
+    
+}( document, jQuery ) );
 

@@ -11,6 +11,7 @@
         gulp          = require( 'gulp' ),
         gulpif        = require( 'gulp-if' ),
         rename        = require( 'gulp-rename' ),
+        insert        = require( 'gulp-insert' ),
         del           = require( 'del' ),
         concat        = require( 'gulp-concat' ),
         connect       = require( 'gulp-connect' ),
@@ -59,9 +60,17 @@
                pad( now.getMinutes() ) + pad( now.getSeconds() );
     }
 
+    function _getLiveReloadJs() {
+        return ';( function() { _b.load.js( \'http://' +
+               options.localhost +
+               ':8088/livereload.js?snipver=1\'); }() );';
+    }
+
     options = {
-        dev: _getArg( '--dev' ),
-        rev: _getArg( '--rev' )
+        localhost: 'localhost',
+        dev      : _getArg( '--dev' ),
+        live     : !_getArg( '--nolive' ),
+        rev      : _getArg( '--rev' )
     };
 
     dir = {
@@ -102,31 +111,33 @@
 
     //----- Build for prod -----//
 
-    gulp.task( 'build', [ 'imgoptimize', 'js-build-min', 'minify-head', 'css-build-min', 'fontcss-build' ], function () {
+    gulp.task( 'build',
+        [ 'imgoptimize', 'js-build-min', 'minify-head', 'css-build-min', 'fontcss-build' ],
+        function () {
 
-        var destDir        = options.dev ? 'dev' : 'dist',
-            useCacheBuster = !!( options.rev && !options.dev ),
-            timestamp      = _timestamp();
+            var destDir        = options.dev ? 'dev' : 'dist',
+                useCacheBuster = !!( options.rev && !options.dev ),
+                timestamp      = _timestamp();
 
-        del( [ path.join( dir.dist, '/**/*-*.js' ), path.join( dir.dist, '/**/*-*.css' ) ] );
+            del( [ path.join( dir.dist, '/**/*-*.js' ), path.join( dir.dist, '/**/*-*.css' ) ] );
 
-        console.log( useCacheBuster );
-        console.log( 'Building ' + destDir );
+            console.log( useCacheBuster );
+            console.log( 'Building ' + destDir );
 
-        return gulp.src( [
-                       _devDir( files.js ),
-                       _devDir( files.css ),
-                       _devDir( files.jsmin ),
-                       _devDir( files.cssmin ),
-                       _devDir( files.cssfonts )
-                   ], { base: dir.dev } )
-                   .pipe( gulpif( useCacheBuster,
-                       rename( function ( path ) {
-                           path.basename += '-' + timestamp;
-                       } )
-                   ) )
-                   .pipe( gulp.dest( dir[ destDir ] ) );
-    } );
+            return gulp.src( [
+                           _devDir( files.js ),
+                           _devDir( files.css ),
+                           _devDir( files.jsmin ),
+                           _devDir( files.cssmin ),
+                           _devDir( files.cssfonts )
+                       ], { base: dir.dev } )
+                       .pipe( gulpif( useCacheBuster,
+                           rename( function ( path ) {
+                               path.basename += '-' + timestamp;
+                           } )
+                       ) )
+                       .pipe( gulp.dest( dir[ destDir ] ) );
+        } );
 
     //----- Building CSS -----//
 
@@ -146,16 +157,18 @@
             } ) );
     }
 
-    gulp.task( 'css-build', function () {
+    gulp.task( 'css-build-dev', function () {
         return buildCss( gulp.src( path.join( dir.sass, files.sass ) ) )
-            .pipe( gulp.dest( dir.dev ) );
+            .pipe( gulp.dest( dir.dev ) )
+            .pipe( gulpif( options.live, connect.reload() ) );
     } );
 
-    gulp.task( 'css-build-min', [ 'css-build' ], function () {
-        return gulp.src( [ _devDir( files.css ) ] )
-                   .pipe( rename( files.cssmin ) )
-                   .pipe( cssnano() )
-                   .pipe( gulp.dest( dir.dev ) );
+    gulp.task( 'css-build-min', function () {
+        return buildCss( gulp.src( path.join( dir.sass, files.sass ) ) )
+            .pipe( gulp.dest( dir.dev ) )
+            .pipe( rename( files.cssmin ) )
+            .pipe( cssnano() )
+            .pipe( gulp.dest( dir.dev ) );
     } );
 
     gulp.task( 'fontcss-build', function () {
@@ -228,14 +241,18 @@
                    .pipe( gulp.dest( dir.dev ) );
     } );
 
-    gulp.task( 'js-build-dev', [ 'sitejs-concat' ], function () {
+    function jsBuildDev() {
         return gulp.src( [
                        _devDir( files.vendorjs ),
                        _devDir( files.sitejs )
                    ] )
                    .pipe( concat( files.js ) )
-                   .pipe( gulp.dest( dir.dev ) );
-    } );
+                   .pipe( gulpif( options.live, insert.append( _getLiveReloadJs() ) ) )
+                   .pipe( gulp.dest( dir.dev ) )
+                   .pipe( gulpif( options.live, connect.reload() ) );
+    }
+
+    gulp.task( 'js-build-dev', [ 'sitejs-concat' ], jsBuildDev );
 
     gulp.task( 'vendorjs-build-dev', [ 'vendorjs-concat' ], function () {
         return gulp.src( [
@@ -272,14 +289,20 @@
     gulp.task( 'connect', function () {
         connect.server( {
             root      : dir.dev,
-            livereload: false
+            livereload: {
+                enable: options.live,
+                port  : 8088
+            },
+            host      : options.localhost,
+            port      : 8080
         } );
     } );
 
-    gulp.task( 'watch', [ 'css-build', 'alljs-concat', 'connect' ], function () {
+    gulp.task( 'watch', [ 'css-build-dev', 'alljs-concat', 'connect' ], function () {
+        jsBuildDev(); // Run once first to insert LiveReload JS
         gulp.watch( path.join( dir.hintedjs, '/**/*.js' ), [ 'js-build-dev' ] );
         gulp.watch( dir.vendorjs, [ 'vendorjs-build-dev' ] );
-        gulp.watch( path.join( dir.sass, '/**/*.scss' ), [ 'css-build' ] );
+        gulp.watch( path.join( dir.sass, '/**/*.scss' ), [ 'css-build-dev' ] );
     } );
 
     gulp.task( 'default', [ 'watch' ] );

@@ -1,7 +1,7 @@
 
 # SiteVision Front End Boilerplate
 
-Node, Gulp, Sass, Autoprefixer, minification, 
+Node, Gulp, Sass, LiveReload, Autoprefixer, minification, 
 image optimization and embedding and more. 
 
 *Created by Henrik Ekelöf at Bouvet Örebro in 2016.*
@@ -20,6 +20,7 @@ image optimization and embedding and more.
    - [Gulp](#gulp)
       - [Gulp Watch](#gulp-watch)
       - [Gulp Build](#gulp-build)
+      - [LiveReload](#livereload)
    - [Git](#git)
    - [Optimized images](#optimized-images)
    - [Embedded images](#embedded-images)
@@ -67,6 +68,8 @@ My setup is:
 
 ## Set up a new project
 
+Prerequisites: Node.js
+
 ### GitHub Repo
 
 - Create a new GitHub repository for the project
@@ -86,10 +89,21 @@ My setup is:
 - Edit _config.yml (set project name)
 - Run `$ npm install`
 
+If you run into errors with installing gulp-sass, try `$ npm install node-sass --unsafe-perm` and `$ npm install` again. This is because node-sass is not pure JavaScript module, it includes binary component as well as the custom installation scripts.
+
+
 ### SiteVision project site setup
 
-- Copy content from additional-head-elements.vm to SiteVision as an "Additional HEAD element" with Velocity type.
-- Add metadata (as links): assetJsMain, assetCssMain, assetCssFonts (optional)
+Copy content from additional-head-elements.vm to SiteVision as an "Additional HEAD element" with Velocity type.
+
+
+Add metadata (as links): 
+
+- assetJsMain
+- assetCssMain
+- assetCssFonts (optional)
+    
+Set "Visible for roles" to "Administrator" for all.
 
 Now you can build the site and deploy so you get your asset URLs. Point metadata in SiteVision to URLs on GitHub Pages.
 
@@ -132,6 +146,13 @@ Default URLs for local files:
 `$ gulp build --rev`
 
 - Same as `$ gulp build` but will add a timestamp to the file name.
+
+
+#### LiveReload
+
+When you start your localhost server with `$ gulp watch`, a script will be injected that live reloads your website (uses Web Sockets).
+
+`$ gulp watch --nolive` to disable
 
 
 ### Git
