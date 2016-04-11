@@ -111,16 +111,16 @@
                 result;
 
             try {
-                w.localStorage.setItem( uid, uid );
-                result = w.localStorage.getItem( uid ) === uid;
-                w.localStorage.removeItem( uid );
-                return result && w.localStorage;
+                win.localStorage.setItem( uid, uid );
+                result = win.localStorage.getItem( uid ) === uid;
+                win.localStorage.removeItem( uid );
+                return result && win.localStorage;
             } catch ( exception ) {
             }
 
         }() );
 
-        _b.sessionStorage = _b.localStorage ? w.sessionStorage : false;
+        _b.sessionStorage = _b.localStorage ? win.sessionStorage : false;
 
 
         
