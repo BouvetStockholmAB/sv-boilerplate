@@ -126,7 +126,7 @@
         
         if ( assetCssFonts && _b.localStorage ) {
             
-            fontCss = _b.localStorage.getItem( 'bvSiteFont' );
+            fontCss = _b.localStorage.getItem( 'bvSiteFonts' );
 
             if ( fontCss ) {
                 _b.appendStyle( fontCss );
