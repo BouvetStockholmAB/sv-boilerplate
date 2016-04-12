@@ -121,8 +121,8 @@
 
             del( [ path.join( dir.dist, '/**/*-*.js' ), path.join( dir.dist, '/**/*-*.css' ) ] );
 
-            console.log( useCacheBuster );
-            console.log( 'Building ' + destDir );
+            console.log( 'Building ' + destDir +
+                         ( ( useCacheBuster ) ? ' rev ' + timestamp : '' ) );
 
             return gulp.src( [
                            _devDir( files.js ),
