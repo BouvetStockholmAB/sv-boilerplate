@@ -9,7 +9,7 @@ title: Scripts and stylesheets
 <ul>
 {% for file in site.static_files %}
     {% if file.path contains '/dist/' %}
-        <li><a href="{{ site.github.url }}{{ file.path }}" title="Updated: {{ file.modified_time | date: "%Y-%m-%d %H:%M" }}">{{ site.github.url }}{{ file.path }}</a></li>
+        <li><a href="{{ site.github.url | replace: 'http:', '' }}{{ file.path }}" title="Updated: {{ file.modified_time | date: "%Y-%m-%d %H:%M" }}">{{ site.github.url | replace: 'http:', '' }}{{ file.path }}</a></li>
     {% endif %}
 {% endfor %}
 </ul>
