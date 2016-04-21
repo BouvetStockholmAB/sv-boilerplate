@@ -6,11 +6,11 @@
         'abstracts/mixins';
 
 // 2. Vendors
-@import 'vendor/normalize';
+@import 'base/font-face',
+        'vendor/normalize';
 
 // 3. Base stuff
-@import 'base/font-face',
-        'base/base',
+@import 'base/base',
         'base/extends',
         'base/bgimg-extends',
         'base/typography',
