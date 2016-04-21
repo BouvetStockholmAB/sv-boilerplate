@@ -1,0 +1,46 @@
+
+## Place script portlet for assetCssMain first in body.
+
+
+<script>
+//----- Script Module (JavaScript Tab)  START -----
+
+var currentPage = require( 'PortletContextUtil' ).getCurrentPage(),
+    propertyUtil = require( 'PropertyUtil' ),
+    session = request.getServletRequest().getSession(),
+    devmode = request.getParameter( 'devmode' ),
+    assetCssMain = '//localhost:8080/main.css', 
+    useLocalAssets;
+
+if ( typeof devmode === 'string' ) {
+    session.setAttribute( 'useLocalAssets', ( devmode === 'false' ) ? '' : 'true' );
+}
+
+useLocalAssets = ( session.getAttribute( 'useLocalAssets' ) === 'true' );
+
+if ( !useLocalAssets ) {
+    assetCssMain = propertyUtil.getNode( currentPage, 'assetCssMain' );
+    if ( assetCssMain ) {
+        assetCssMain = propertyUtil.getString( assetCssMain, 'URI' );
+    } else {
+        assetCssMain = propertyUtil.getString( currentPage, 'assetCssMain' );
+    }
+}
+
+//----- Script Module (JavaScript Tab)  END -----
+</script>
+
+
+##----- Script Module (Velocity Tab) START -----
+
+
+#if ($useLocalAssets)
+    ## Localhost assets
+    <script id="js-debug"> console.log('Using local assets'); </script>
+#end 
+
+<link rel="stylesheet" property="stylesheet" media="all" href="$!{assetCssMain}">
+
+
+##----- Script Module (Velocity Tab) END -----
+

@@ -1,0 +1,8 @@
+
+## Place as "Additional HEAD element" in classic mode (velocity)
+
+<script>
+    var _b = _b || {}, BV = BV || {}; _b.init = [];   
+    document.documentElement.className += ' bv-js ';    
+</script>
+

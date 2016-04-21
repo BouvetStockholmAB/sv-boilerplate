@@ -16,6 +16,7 @@ image optimization and embedding and more.
    - [Add the boilerplate](#add-the-boilerplate)
    - [Edit project files](#edit-project-files)
    - [SiteVision project site setup](#sitevision-project-site-setup)
+   - [SiteVision project site changes when going live](#siteVision-project-site-changes-when-going-live)
 - [How to use](#how-to-use)
    - [Gulp](#gulp)
       - [Gulp Watch](#gulp-watch)
@@ -52,18 +53,16 @@ My setup is:
 - [Gulp](http://gulpjs.com/) tasks.
 - [Sass](http://sass-lang.com/).
 - [Autoprefixer](https://github.com/postcss/autoprefixer).
-- CSS minification.
 - [Optimization of image assets](https://github.com/sindresorhus/gulp-imagemin).
 - Images embedded (Base64 encoded) in CSS on demand.
-- Script concatention and minification.
-- Setup for async loading of font-face fonts embedded in separate CSS.
-- Setup for non-blocking async load of JavaScript file.
+- Script concatention
 - Custom [Lodash](https://lodash.com/) builds based on usage in JS-files available.
 - JSHint on build, .jshintrc for use by IDE.
 - JSCS on build, .jscsrc for use by IDE. Uses customized version of [jQuery JS Style Guide](https://contribute.jquery.org/style-guide/js/)
 - Serving assets from localhost
-- Instructions and velocity script for including files in SiteVision (head)
+- Instructions and custom script modules for including files in SiteVision
 - Bookmarklet to toggle dev- and production (or demo) mode
+- Instructions for including files for finished site
 
 
 ## Set up a new project
@@ -94,18 +93,26 @@ If you run into errors with installing gulp-sass, try `$ npm install node-sass -
 
 ### SiteVision project site setup
 
-Copy content from additional-head-elements.vm to SiteVision as an "Additional HEAD element" with Velocity type.
+1. In your base template, create two script modules. One as early as possible in the page before all content, and one last in the page after all content. Copy portlet scripts from devmode-assetCssMain.vm to the first portlet and devmode-assetJsMain.vm to the last.
 
+2. Create a new "Additional HEAD element" in classic mode with type Velocity and add content from additional-head-element.vm there.
 
-Add metadata (as links): 
+3. Add metadata (as links): 
 
 - assetJsMain
 - assetCssMain
-- assetCssFonts (optional)
     
 Set "Visible for roles" to "Administrator" for all.
 
 Now you can build the site and deploy so you get your asset URLs. Point metadata in SiteVision to URLs on GitHub Pages.
+
+### SiteVision project site changes when going live
+
+1. Remove metadata assetJsMain and assetCssMain. Remove portlets (see [SiteVision project site setup](#sitevision-project-site-setup)). 
+
+2. Upload JS and CSS to SiteVision file repository. 
+
+3. In your base template, add CSS asset for your CSS file and JavaScript asset in body for your JS file.     
 
 
 ## How to use
@@ -137,9 +144,9 @@ Default URLs for local files:
 `$ gulp build`
 
 - Run JSHint and JSCS to check scripts
-- Build, concatenate and minify JS
+- Build and concatenate JS
 - Optimize images
-- Compile Sass and minify the CSS
+- Compile Sass to CSS
 - Build custom version of Lodash based on usage in files (optional)
 - Autoprefixer
 
@@ -178,15 +185,6 @@ By using the function data-uri in your Sass code you may choose to embed an imag
 `background-image: data-uri( "foo.svg" )`
 
 
-### Async font-face
-
-This is my prefered way of including font-face fonts. The advantage is that there will never be a blank screen while your fonts are loading. The fallback font will be visible first (on first page load only), then switched to the font-face font. With a good fallback, this will be quite invisible. On following requests, the font-face font will be stored in localStorage and applied immediately in head, so there will be no request at all.
-
-The script loader (see [Async JS](#async-js)) will trigger loading of the font CSS file if it exists in metadata. The file is fetched asynchronously (AJAX) and stored in localStorage. On the next request we check if there is CSS in localStorage and, if so, skip the request. The CSS file will have the font-face font embedded as Base64.
-
-- fonts.css must always be uploaded to the SiteVision server. It is fetched with AJAX so it must be on the same domain as the visited page.
-
-
 ### Sass 
 
 The folder structure is using [the 7-1 architecture pattern](http://sass-guidelin.es/#architecture). 
@@ -201,13 +199,6 @@ Some stuff included:
 - Example on how to use same background multiple times with only one include (see `_bgimg-extends.scss`)
 
 
-### Async JS
-
-The main JS file will be loaded asynchronously. The load is triggered inline in head. That means you don't know if the JS will be executed before or after DOMContentLoaded, and have to write your JS accordingly.
-
-The advantage with this model is that there will be no blocking JS request. The script that triggers the load is inlined and the JS file is async, so the only file that is blocking the page load in head is the main CSS file.
-
-
 ### Init JS module
 
 Modules (functions) in your JS that you want to invoke on certain pages should be initialized from the HTML. 
@@ -217,7 +208,7 @@ Example:
 Put this anywhere in the HTML body:
 `<script> _b.init.push( 'BV.fooBar' ) </script>`
 
-On DOMContentLoaded or when the main script file has finished loading (whichever occurs last), the function BV.fooBar will be invoked.
+On DOMContentLoaded the function BV.fooBar will be invoked.
 
 
 

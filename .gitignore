@@ -4,7 +4,6 @@ _dev
 _temp
 dist/*-*.js
 dist/*-*.css
-_resources/additional-head-min.vm
 
 # Node JS
 node_modules

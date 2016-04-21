@@ -1,0 +1,42 @@
+
+## Place script portlet for assetJsMain last in body.
+
+
+<script>
+//----- Script Module (JavaScript Tab)  START -----
+
+var currentPage = require( 'PortletContextUtil' ).getCurrentPage(),
+    propertyUtil = require( 'PropertyUtil' ),
+    session = request.getServletRequest().getSession(),
+    assetJsMain = '//localhost:8080/main.js',
+    useLocalAssets;
+
+useLocalAssets = ( session.getAttribute( 'useLocalAssets' ) === 'true' );
+
+if ( !useLocalAssets ) {
+    
+    assetJsMain = propertyUtil.getNode( currentPage, 'assetJsMain' );
+
+    if ( assetJsMain ) {
+        assetJsMain = propertyUtil.getString( assetJsMain, 'URI' );
+    } else {
+        assetJsMain = propertyUtil.getString( currentPage, 'assetJsMain' );
+    }
+
+}
+
+//----- Script Module (JavaScript Tab)  END -----
+</script>
+
+
+
+##----- Script Module (Velocity Tab) START -----
+
+
+<script src="$!{assetJsMain}"></script>
+
+
+##----- Script Module (Velocity Tab) END -----
+
+
+

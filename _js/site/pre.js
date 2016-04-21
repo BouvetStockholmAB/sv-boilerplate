@@ -42,6 +42,56 @@ _b.throttle = function ( fn, threshhold, scope ) {
 };
 
 
+// ==|== Async JS loader ======================================================================== //
+
+( function ( doc, s ) {
+
+    'use strict';
+
+    _b.load = {
+        /**
+         * Load JavaScript file async by adding script tag to DOM.
+         * May be used for own scripts or external scripts.
+         * (script) _b.load.js( 'some-js-file.js' ) (/script)
+         * // => Loads and executes some-js-file.js
+         */
+        js: function ( src ) {
+            var script   = doc.createElement( s ),
+                beforeEl = doc.getElementsByTagName( s )[ 0 ];
+            script.src   = src;
+            beforeEl.parentNode.insertBefore( script, beforeEl );
+            return script;
+        }
+    };
+
+}( document, 'script' ) );
+
+
+// ==|== LocalStorage Detection ================================================================= //
+
+( function ( win ) {
+
+    'use strict';
+
+    _b.localStorage = ( function () {
+
+        var uid = new Date().toString(),
+            result;
+
+        try {
+            win.localStorage.setItem( uid, uid );
+            result = win.localStorage.getItem( uid ) === uid;
+            win.localStorage.removeItem( uid );
+            return result && win.localStorage;
+        } catch ( exception ) {
+        }
+
+    }() );
+
+    _b.sessionStorage = _b.localStorage ? win.sessionStorage : false;
+
+}( window ) );
+
 
 // ==|== Misc Toolbox Functions ================================================================= //
 

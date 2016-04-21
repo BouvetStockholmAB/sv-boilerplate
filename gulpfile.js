@@ -18,14 +18,10 @@
         sass          = require( 'gulp-sass' ),
         imagemin      = require( 'gulp-imagemin' ),
         inlineBase64  = require( 'gulp-inline-base64' ),
-        file2base64   = require( 'gulp-css-file2base64' ),
         lodashBuilder = require( 'gulp-lodash-builder' ),
         jshint        = require( 'gulp-jshint' ),
         jscs          = require( 'gulp-jscs' ),
-        uglify        = require( 'gulp-uglify' ),
-        autoprefixer  = require( 'gulp-autoprefixer' ),
-        cssnano       = require( 'gulp-cssnano' ),
-        minifyInline  = require( 'gulp-minify-inline' );
+        autoprefixer  = require( 'gulp-autoprefixer' );
 
     //----- Helpers -----//
 
@@ -61,7 +57,7 @@
     }
 
     function _getLiveReloadJs() {
-        return ';( function() { _b.load.js( \'http://' +
+        return ';( function() { _b.load.js( \'//' +
                options.localhost +
                ':8088/livereload.js?snipver=1\'); }() );';
     }
@@ -78,7 +74,6 @@
         dist     : 'dist',
         sass     : '_sass',
         images   : '_images/', // Must use ending slash!
-        fonts    : '_fonts',
         resources: '_resources/',
         hintedjs : '_js/site',
         sitejs   : [
@@ -89,30 +84,27 @@
         temp     : '_temp',
         vendorjs : [
             '_js/vendor/polyfills.js',
-            '_js/vendor/jquery-custom-plugins.js',
+            '_js/vendor/jquery-custom-plugins.js'
+            // '_js/vendor/cookie-monster.custom.js',
+            // '_js/vendor/cookies-bar.js',
             // '_js/vendor/fastclick.js',
         ]
     };
 
     files = {
-        sass     : 'main.scss',
-        css      : 'main.css',
-        cssmin   : 'main.min.css',
-        cssfonts : 'fonts.css',
-        lodash   : 'lodash.custom.js',
-        sitejs   : 'main-site.js',
-        vendorjs : 'main-vendor.js',
-        js       : 'main.js',
-        jsmin    : 'main.min.js',
-        headvm   : 'additional-head-src.vm',
-        headvmmin: 'additional-head-min.vm'
+        sass    : 'main.scss',
+        css     : 'main.css',
+        lodash  : 'lodash.custom.js',
+        sitejs  : 'main-site.js',
+        vendorjs: 'main-vendor.js',
+        js      : 'main.js'
     };
 
 
     //----- Build for prod -----//
 
     gulp.task( 'build',
-        [ 'imgoptimize', 'js-build-min', 'minify-head', 'css-build-min', 'fontcss-build' ],
+        [ 'imgoptimize', 'js-build-dist', 'css-build-dist' ],
         function () {
 
             var destDir        = options.dev ? 'dev' : 'dist',
@@ -126,10 +118,7 @@
 
             return gulp.src( [
                            _devDir( files.js ),
-                           _devDir( files.css ),
-                           _devDir( files.jsmin ),
-                           _devDir( files.cssmin ),
-                           _devDir( files.cssfonts )
+                           _devDir( files.css )
                        ], { base: dir.dev } )
                        .pipe( gulpif( useCacheBuster,
                            rename( function ( path ) {
@@ -163,18 +152,9 @@
             .pipe( gulpif( options.live, connect.reload() ) );
     } );
 
-    gulp.task( 'css-build-min', function () {
+    gulp.task( 'css-build-dist', function () {
         return buildCss( gulp.src( path.join( dir.sass, files.sass ) ) )
-            .pipe( gulp.dest( dir.dev ) )
-            .pipe( rename( files.cssmin ) )
-            .pipe( cssnano() )
             .pipe( gulp.dest( dir.dev ) );
-    } );
-
-    gulp.task( 'fontcss-build', function () {
-        return gulp.src( path.join( dir.fonts, files.cssfonts ) )
-                   .pipe( file2base64() )
-                   .pipe( gulp.dest( dir.dev ) );
     } );
 
     gulp.task( 'imgoptimize', function () {
@@ -263,24 +243,12 @@
                    .pipe( gulp.dest( dir.dev ) );
     } );
 
-    gulp.task( 'js-build-min', [ 'jshint', 'jscs', 'alljs-concat' ], function () {
+    gulp.task( 'js-build-dist', [ 'jshint', 'jscs', 'alljs-concat' ], function () {
         return gulp.src( [
                        _devDir( files.js )
                    ] )
-                   .pipe( rename( files.jsmin ) )
-                   .pipe( uglify() )
                    .pipe( gulp.dest( dir.dev ) );
 
-    } );
-
-
-    //----- Minifying JS in Velocity (HEAD) -----//
-
-    gulp.task( 'minify-head', function () {
-        gulp.src( path.join( dir.resources, files.headvm ) )
-            .pipe( rename( files.headvmmin ) )
-            .pipe( minifyInline() )
-            .pipe( gulp.dest( dir.resources ) );
     } );
 
 
@@ -289,6 +257,7 @@
     gulp.task( 'connect', function () {
         connect.server( {
             root      : dir.dev,
+            // https     : true,
             livereload: {
                 enable: options.live,
                 port  : 8088

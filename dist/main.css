@@ -354,6 +354,15 @@ th {
   padding: 0; }
 
 /**
+ * Include font-face fonts here.
+ */
+@font-face {
+  font-family: 'astloch';
+  font-style: normal;
+  font-weight: 400;
+  src: url("http://svboilerplate.ekelof.net/download/18.22e6fa351542d801118e287/1461221621451/astloch.woff2") format("woff2"), url("http://svboilerplate.ekelof.net/download/18.22e6fa351542d801118e286/1461221621416/astloch.woff") format("woff"); }
+
+/**
  * Set up a decent box model on the root element
  */
 html {

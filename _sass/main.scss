@@ -9,7 +9,8 @@
 @import 'vendor/normalize';
 
 // 3. Base stuff
-@import 'base/base',
+@import 'base/font-face',
+        'base/base',
         'base/extends',
         'base/bgimg-extends',
         'base/typography',
@@ -21,6 +22,7 @@
 
 // 5. Components
 @import 'components/button';
+        // 'components/cookies-bar';
 
 // 6. Page-specific styles
 @import 'pages/home';
