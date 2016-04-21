@@ -8,8 +8,15 @@
     font-family: Arial, sans-serif;
     padding: 1em 20px;
 
-    @media (min-width: 640px) {
-        padding-right: 10em;
+    &__wrapper {
+        position: relative;
+        z-index: 1;
+        max-width: 1000px;
+        margin: 0 auto;
+
+        @include media( $bp-min-medium-view ) {
+            padding-right: 10em;
+        }
     }
 
     &.bvCookiesBar--jsGen {

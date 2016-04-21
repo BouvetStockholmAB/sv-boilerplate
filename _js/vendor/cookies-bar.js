@@ -7,8 +7,10 @@
  * You may insert your own HTML if you wish. Use this structure:
  *
  * <div class="bvCookiesBar bvCookiesBar--bottomRight">
- *     <p>We use <a href="#foo">cookies</a>.</p>
- *     <button class="bvCookiesBar__button">OK</button>
+ *     <div class="bvCookiesBar__wrapper">
+ *         <p>We use <a href="#foo">cookies</a>.</p>
+ *         <button class="bvCookiesBar__button">OK</button>
+ *     </div>
  * </div>
  *
  * 1. The container must match the className in var conf.cssClassName
@@ -50,10 +52,12 @@ var _b = _b || {};
     function createBanner() {
         banner = document.createElement( 'div' );
         banner.className = conf.cssClassName + ' ' + conf.cssClassName + '--jsGen';
-        banner.innerHTML = conf.text +
+        banner.innerHTML = '<div class="' + conf.cssClassName + '__wrapper">' +
+                           conf.text +
                            '<button class="' + conf.cssClassName + '__button">' +
                            conf.btnText +
-                           '</button>';
+                           '</button>' +
+                            '';
         document.body.insertBefore( banner, document.body.firstChild );
 
     }
