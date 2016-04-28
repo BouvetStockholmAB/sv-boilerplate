@@ -14,17 +14,22 @@ var _b = _b || {};
     'use strict';
 
     _b.cookie = {
-        set      : function ( name, value, days, path, secure ) {
+        set      : function ( name, value, options ) {
             var date       = new Date(),
                 expires    = '',
-                type       = typeof( value ),
+                type       = typeof value,
                 valueToUse = '',
-                secureFlag = '';
-            path           = path || '/';
-            if ( days ) {
-                date.setTime( date.getTime() + ( days * 24 * 60 * 60 * 1000 ) );
+                secureFlag = '',
+                domainFlag = '',
+                path;
+
+            path = ( options && options.path ) ? options.path : '/';
+
+            if ( options && options.days ) {
+                date.setTime( date.getTime() + ( options.days * 24 * 60 * 60 * 1000 ) );
                 expires = '; expires=' + date.toUTCString();
             }
+
             if ( type === 'object' && type !== 'undefined' ) {
                 if ( !( 'JSON' in window ) ) {
                     throw 'Bummer, your browser doesn\'t support JSON parsing.';
@@ -33,11 +38,18 @@ var _b = _b || {};
             } else {
                 valueToUse = encodeURIComponent( value );
             }
-            if ( secure ) {
-                secureFlag = '; secure';
+
+            if ( options && options.secure ) {
+                secureFlag = ';secure';
             }
 
-            document.cookie = name + '=' + valueToUse + expires + '; path=' + path + secureFlag;
+            if ( options && options.domain ) {
+                domainFlag = ';domain=' + options.domain;
+            }
+
+            document.cookie = name + '=' + valueToUse + expires +
+                              ';path=' + path + secureFlag + domainFlag;
+
         },
         get      : function ( name ) {
             var nameEQ    = name + '=',
@@ -73,15 +85,15 @@ var _b = _b || {};
             return null;
         },
         remove   : function ( name ) {
-            this.set( name, '', -1 );
+            this.set( name, '', { days: -1 } );
         },
         increment: function ( name, days ) {
             var value = this.get( name ) || 0;
-            this.set( name, ( parseInt( value, 10 ) + 1 ), days );
+            this.set( name, ( parseInt( value, 10 ) + 1 ), { days: days } );
         },
         decrement: function ( name, days ) {
             var value = this.get( name ) || 0;
-            this.set( name, ( parseInt( value, 10 ) - 1 ), days );
+            this.set( name, ( parseInt( value, 10 ) - 1 ), { days: days } );
         }
     };
 
