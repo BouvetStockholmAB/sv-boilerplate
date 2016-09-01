@@ -7,7 +7,7 @@
         &:visited {
 
         }
-        @include on-event {
+        @include hover-focus-active {
             text-decoration: underline;
         }
     }
@@ -22,7 +22,7 @@
         &:visited {
 
         }
-        @include on-event {
+        @include hover-focus-active {
             text-decoration: underline;
         }
     }

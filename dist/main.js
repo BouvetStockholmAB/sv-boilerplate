@@ -87,6 +87,7 @@
 
 
 
+
 // ==|== Prettier Vertical Visibility Toggler =================================================== //
 
 ( function ( $ ) {
@@ -107,6 +108,29 @@
                 paddingTop   : 'toggle',
                 paddingBottom: 'toggle',
                 opacity      : 'toggle'
+            }, duration || 300 );
+        };
+
+    }
+
+    if ( !$.fn.showVertical ) {
+        $.fn.showVertical = function ( duration ) {
+            return this.animate( {
+                height       : 'show',
+                paddingTop   : 'show',
+                paddingBottom: 'show',
+                opacity      : 'show'
+            }, duration || 300 );
+        };
+    }
+
+    if ( !$.fn.hideVertical ) {
+        $.fn.hideVertical = function ( duration ) {
+            return this.animate( {
+                height       : 'hide',
+                paddingTop   : 'hide',
+                paddingBottom: 'hide',
+                opacity      : 'hide'
             }, duration || 300 );
         };
     }
