@@ -13,6 +13,10 @@
 
         function attachFastClick( el ) {
 
+            if ( !el ) {
+                return;
+            }
+            
             if ( $.isjQueryObject( el ) ) {
                 // jQuery object - make recursive call for each node.
                 el.each( function ( i, e ) { attachFastClick( e ); } );

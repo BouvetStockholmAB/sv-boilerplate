@@ -20,7 +20,7 @@ var _b = _b || {};
 
     var conf = {
             dismissFor: 365, // days to save cookie
-            domain: window.location.hostname,
+            domain    : window.location.hostname,
             cookieName: 'bvCookiesCookie'
         },
         banner;
@@ -28,7 +28,7 @@ var _b = _b || {};
     function handleDismiss( e ) {
         if ( e.target && e.target.nodeName === 'BUTTON' ) {
             cookie.set( conf.cookieName, 'dismissed', {
-                days: conf.dismissFor,
+                days  : conf.dismissFor,
                 domain: conf.domain
             } );
             banner.parentNode.removeChild( banner );
