@@ -15,6 +15,11 @@
     @return $em;
 }
 
+@function vw( $target, $context ) {
+    $vw-context: ( $context * 0.01 ) * 1px;
+    @return ( $target / $vw-context ) * 1vw;
+}
+
 @function lineHeight( $px, $base: 16px ) {
     $number: ($px / $base);
     @if type-of($number) == 'number' and not unitless($number) {
