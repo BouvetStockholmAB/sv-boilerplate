@@ -2,9 +2,16 @@
 // This file contains all application-wide Sass functions.
 // -----------------------------------------------------------------------------
 
-@function rem( $px, $isFontSize: false ) {
+@function strip-unit($number) {
+    @if type-of($number) == 'number' and not unitless($number) {
+        @return $number / ($number * 0 + 1);
+    }
+    @return $number;
+}
+
+@function rem( $px, $useFontPxFallback: false ) {
     $rem: ( $px / 16px ) * 1rem;
-    @if ($isFontSize) {
+    @if ( $useFontPxFallback ) {
         @return unquote($px + "; font-size: " + $rem);
     }
     @return $rem;
@@ -16,7 +23,7 @@
 }
 
 @function vw( $target, $context ) {
-    $vw-context: ( $context * 0.01 ) * 1px;
+    $vw-context: ( strip-unit( $context ) * 0.01 ) * 1px;
     @return ( $target / $vw-context ) * 1vw;
 }
 

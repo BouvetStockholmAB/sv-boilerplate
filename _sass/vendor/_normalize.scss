@@ -194,7 +194,19 @@ sub {
  */
 
 img {
-    border: 0;
+    &,
+    .sv-responsive .sv-image-portlet &,
+    .sv-responsive .sv-buddyicon-portlet &,
+    .sv-responsive .sv-randomimage-portlet &,
+    .sv-responsive .sv-archive-portlet .sv-channel-image,
+    .sv-responsive .sv-linklist-portlet .sv-channel-image,
+    .sv-responsive .sv-blog-portlet .sv-channel-image {
+        display:block;
+        max-width: 100% !important;
+        max-height: none !important;
+        height:auto;
+        border: 0;
+    }
 }
 
 /**

@@ -192,7 +192,25 @@ _b.throttle = function ( fn, threshhold, scope ) {
         return true;
     };
 
+    // ==|== Scrollable Element ===================================================================== //
+
+    _b.scrollableElement = ( function ( doc ) {
+        var docEl = doc.documentElement,
+            scrollTop = docEl.scrollTop,
+            hasScrolled;
+        docEl.scrollTop += 1;
+        hasScrolled = ( docEl.scrollTop === scrollTop + 1 );
+        docEl.scrollTop = scrollTop;
+        if ( hasScrolled ) {
+            return docEl;
+        }
+        return doc.body;
+    }( document ) );
+
+    _b.$scrollableElement = jQuery( _b.scrollableElement );
+
 }() );
+
 
 
 // ==|== Check for edit mode ==================================================================== //
