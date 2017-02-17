@@ -202,6 +202,7 @@ img {
     .sv-responsive .sv-linklist-portlet .sv-channel-image,
     .sv-responsive .sv-blog-portlet .sv-channel-image {
         display:block;
+        width: auto;
         max-width: 100% !important;
         max-height: none !important;
         height:auto;
