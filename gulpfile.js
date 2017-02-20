@@ -133,7 +133,7 @@
     function buildCss( inputStream ) {
         return inputStream
             .pipe( sass( {
-                outputStyle: 'nested'
+                outputStyle: 'expanded'
             } ).on( 'error', sass.logError ) )
             .pipe( inlineBase64( {
                 baseDir: dir.images,
