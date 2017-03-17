@@ -4,7 +4,7 @@
  *
  * Dependency: cookie-monster.js
  *
- * Create Script portlet from _resources/script-portlets/cookies-bar.js and .vm files.
+ * Create Script portlet from _resources/script-portlets/cookies.js and .vm files.
  *
  */
 
@@ -18,9 +18,26 @@ var _b = _b || {};
         throw 'Dependency cookie-monster.custom.js missing.';
     }
 
+    function getDomain() {
+
+        var parts = window.location.hostname.split( '.' );
+
+        if ( parts.length === 1 ) {
+            return parts;
+        }
+
+        if ( parts.length > 2 ) {
+            parts.shift();
+        }
+
+        return '.' + parts.join( '.' );
+
+    }
+
+
     var conf = {
             dismissFor: 365, // days to save cookie
-            domain    : window.location.hostname,
+            domain    : getDomain(),
             cookieName: 'bvCookiesCookie'
         },
         banner;

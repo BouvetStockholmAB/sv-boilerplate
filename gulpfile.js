@@ -11,6 +11,7 @@
         gulp          = require( 'gulp' ),
         gulpif        = require( 'gulp-if' ),
         rename        = require( 'gulp-rename' ),
+        replace       = require( 'gulp-replace' ),
         insert        = require( 'gulp-insert' ),
         del           = require( 'del' ),
         concat        = require( 'gulp-concat' ),
@@ -86,7 +87,7 @@
             '_js/vendor/polyfills.js',
             '_js/vendor/jquery-custom-plugins.js'
             // '_js/vendor/cookie-monster.custom.js',
-            // '_js/vendor/cookies-bar.js',
+            // '_js/vendor/cookies.js',
             // '_js/vendor/fastclick.js',
         ]
     };
@@ -140,6 +141,7 @@
                 maxSize: 1,
                 debug  : true
             } ) )
+            .pipe( replace( '@charset "UTF-8";', '' ) )
             .pipe( autoprefixer( {
                 browsers: [ 'last 2 versions' ],
                 cascade : false
