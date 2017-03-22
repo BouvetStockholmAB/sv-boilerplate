@@ -192,7 +192,7 @@ _b.throttle = function ( fn, threshhold, scope ) {
         return true;
     };
 
-    // ==|== Scrollable Element ===================================================================== //
+    // ==|== Scrollable Element ================================================================= //
 
     _b.scrollableElement = ( function ( doc ) {
         var docEl = doc.documentElement,
