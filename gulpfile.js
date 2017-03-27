@@ -5,21 +5,17 @@
     'use strict';
 
     var dir,
-        files,
         options,
         path          = require( 'path' ),
         gulp          = require( 'gulp' ),
         gulpif        = require( 'gulp-if' ),
         rename        = require( 'gulp-rename' ),
         replace       = require( 'gulp-replace' ),
-        insert        = require( 'gulp-insert' ),
         del           = require( 'del' ),
-        concat        = require( 'gulp-concat' ),
         connect       = require( 'gulp-connect' ),
         sass          = require( 'gulp-sass' ),
         imagemin      = require( 'gulp-imagemin' ),
         inlineBase64  = require( 'gulp-inline-base64' ),
-        lodashBuilder = require( 'gulp-lodash-builder' ),
         jshint        = require( 'gulp-jshint' ),
         jscs          = require( 'gulp-jscs' ),
         autoprefixer  = require( 'gulp-autoprefixer' );
@@ -76,30 +72,10 @@
         sass     : '_sass',
         images   : '_images/', // Must use ending slash!
         resources: '_resources/',
-        hintedjs : '_js/site',
-        sitejs   : [
-            '_js/site/pre.js',
-            '_js/site/modules/**/*.js',
-            '_js/site/post.js'
-        ],
-        temp     : '_temp',
-        vendorjs : [
-            '_js/vendor/polyfills.js',
-            '_js/vendor/jquery-custom-plugins.js'
-            // '_js/vendor/cookie-monster.custom.js',
-            // '_js/vendor/cookies.js',
-            // '_js/vendor/fastclick.js',
-        ]
+        js       : '_js',
+        temp     : '_temp'
     };
 
-    files = {
-        sass    : 'main.scss',
-        css     : 'main.css',
-        lodash  : 'lodash.custom.js',
-        sitejs  : 'main-site.js',
-        vendorjs: 'main-vendor.js',
-        js      : 'main.js'
-    };
 
 
     //----- Build for prod -----//
@@ -118,9 +94,9 @@
                          ( ( useCacheBuster ) ? ' rev ' + timestamp : '' ) );
 
             return gulp.src( [
-                           _devDir( files.js ),
-                           _devDir( files.css )
-                       ], { base: dir.dev } )
+                _devDir( '**/*.js' ),
+                _devDir( '**/*.css' )
+            ], { base: dir.dev } )
                        .pipe( gulpif( useCacheBuster,
                            rename( function ( path ) {
                                path.basename += '-' + timestamp;
@@ -149,14 +125,14 @@
     }
 
     gulp.task( 'css-build-dev', function () {
-        return buildCss( gulp.src( path.join( dir.sass, files.sass ) ) )
-            .pipe( gulp.dest( dir.dev ) )
+        return buildCss( gulp.src( path.join( dir.sass, '**/*.scss' ) ) )
+            .pipe( gulp.dest( path.join( dir.dev, 'css' ) ) )
             .pipe( gulpif( options.live, connect.reload() ) );
     } );
 
     gulp.task( 'css-build-dist', function () {
-        return buildCss( gulp.src( path.join( dir.sass, files.sass ) ) )
-            .pipe( gulp.dest( dir.dev ) );
+        return buildCss( gulp.src( path.join( dir.sass, '**/*.scss' ) ) )
+            .pipe( gulp.dest( path.join( dir.dev, 'css' ) ) );
     } );
 
     gulp.task( 'imgoptimize', function () {
@@ -174,83 +150,41 @@
     //----- Building JS -----//
 
     gulp.task( 'jshint', function () {
-        return gulp.src( path.join( dir.hintedjs, '/**/*.js' ) )
+        return gulp.src( [
+            path.join( dir.js, '/**/*.js' ),
+            '!' + path.join( dir.js, '/vendor/*.js' )
+        ] )
                    .pipe( jshint( '.jshintrc' ) )
                    .pipe( jshint.reporter( 'jshint-stylish' ) )
                    .pipe( jshint.reporter( 'fail' ) );
     } );
 
     gulp.task( 'jscs', function () {
-        return gulp.src( path.join( dir.hintedjs, '/**/*.js' ) )
+        return gulp.src( [
+            path.join( dir.js, '/**/*.js' ),
+            '!' + path.join( dir.js, '/vendor/*.js' )
+        ] )
                    .pipe( jscs() )
                    .pipe( jscs.reporter() );
     } );
 
-    gulp.task( 'lodash-build', function () {
-        return gulp.src( dir.sitejs, {
-                       buffer: false
-                   } )
-                   .pipe( lodashBuilder( {
-                       target  : path.join( dir.temp, files.lodash ),
-                       settings: {}
-                   } ) )
-                   .on( 'error', function ( err ) {
-                       console.log( 'err: ', err );
-                   } );
-    } );
-
-    gulp.task( 'vendorjs-concat', function () {
-        // Add lodash to lib build
-        var vendorjs = dir.vendorjs;
-        // vendorjs.unshift( path.join( dir.temp, files.lodash ) );
-        return gulp.src( vendorjs )
-                   .pipe( concat( files.vendorjs ) )
-                   .pipe( gulp.dest( dir.dev ) );
-    } );
-
-    gulp.task( 'sitejs-concat', function () {
-        return gulp.src( dir.sitejs )
-                   .pipe( concat( files.sitejs ) )
-                   .pipe( gulp.dest( dir.dev ) );
-    } );
-
-    gulp.task( 'alljs-concat', [ 'sitejs-concat', 'lodash-build', 'vendorjs-concat' ], function () {
-        return gulp.src( [
-                       _devDir( files.vendorjs ),
-                       _devDir( files.sitejs )
-                   ] )
-                   .pipe( concat( files.js ) )
-                   .pipe( gulp.dest( dir.dev ) );
-    } );
 
     function jsBuildDev() {
         return gulp.src( [
-                       _devDir( files.vendorjs ),
-                       _devDir( files.sitejs )
-                   ] )
-                   .pipe( concat( files.js ) )
-                   .pipe( gulpif( options.live, insert.append( _getLiveReloadJs() ) ) )
-                   .pipe( gulp.dest( dir.dev ) )
+            path.join( dir.js, '**/*.js' ) // _devDir( '**/*.js' )
+        ] )
+                   //.pipe( gulpif( options.live, insert.append( _getLiveReloadJs() ) ) )
+                   .pipe( gulp.dest( path.join( dir.dev, 'js' ) ) )
                    .pipe( gulpif( options.live, connect.reload() ) );
     }
 
-    gulp.task( 'js-build-dev', [ 'sitejs-concat' ], jsBuildDev );
+    gulp.task( 'js-build-dev', jsBuildDev );
 
-    gulp.task( 'vendorjs-build-dev', [ 'vendorjs-concat' ], function () {
+    gulp.task( 'js-build-dist', [ 'jshint', 'jscs' ], function () {
         return gulp.src( [
-                       _devDir( files.vendorjs ),
-                       _devDir( files.sitejs )
-                   ] )
-                   .pipe( concat( files.js ) )
-                   .pipe( gulp.dest( dir.dev ) );
-    } );
-
-    gulp.task( 'js-build-dist', [ 'jshint', 'jscs', 'alljs-concat' ], function () {
-        return gulp.src( [
-                       _devDir( files.js )
-                   ] )
-                   .pipe( gulp.dest( dir.dev ) );
-
+            path.join( dir.js, '**/*.js' ) // _devDir( '**/*.js' )
+        ] )
+                   .pipe( gulp.dest( path.join( dir.dist, 'js' ) ) );
     } );
 
 
@@ -269,11 +203,11 @@
         } );
     } );
 
-    gulp.task( 'watch', [ 'css-build-dev', 'alljs-concat', 'connect' ], function () {
+    gulp.task( 'watch', [ 'css-build-dev', 'connect' ], function () {
         jsBuildDev(); // Run once first to insert LiveReload JS
-        gulp.watch( path.join( dir.hintedjs, '/**/*.js' ), [ 'js-build-dev' ] );
-        gulp.watch( dir.vendorjs, [ 'vendorjs-build-dev' ] );
-        gulp.watch( path.join( dir.sass, '/**/*.scss' ), [ 'css-build-dev' ] );
+        gulp.watch( path.join( dir.js, '**/*.js' ), [ 'js-build-dev' ] );
+        //gulp.watch( dir.vendorjs, [ 'vendorjs-build-dev' ] );
+        gulp.watch( path.join( dir.sass, '**/*.scss' ), [ 'css-build-dev' ] );
     } );
 
     gulp.task( 'default', [ 'watch' ] );

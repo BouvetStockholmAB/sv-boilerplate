@@ -1,0 +1,28 @@
+
+.heading-1 {
+
+
+    .font-size-vw( @target; @context; @s: '' ) {
+        @vw-context: unit(( unit( @context ) * 0.01 ), px);
+        @vw: unit(( @target / @vw-context ), vw);
+        font-size: ~"@{vw}@{s}";
+    }
+
+    .font-size-rem( @px; @s: '' ) {
+        @rem: unit(( @px / 16px ), rem);
+        font-size: ~"@{rem}@{s}";
+    }
+
+    .font-size-vw( 36px, 375px );
+
+    @media ( min-width: 665px ) {
+        .font-size-rem( 64px );
+    }
+
+    font-weight: 900;
+    letter-spacing: -1px;
+    text-align: center;
+
+
+}
+

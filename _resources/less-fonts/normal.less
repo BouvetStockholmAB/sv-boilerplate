@@ -1,0 +1,25 @@
+
+
+.normal {
+
+    .font-size-vw( @target; @context; @s: '' ) {
+        @vw-context: unit(( unit( @context ) * 0.01 ), px);
+        @vw: unit(( @target / @vw-context ), vw);
+        font-size: ~"@{vw}@{s}";
+    }
+
+    .font-size-rem( @px; @s: '' ) {
+        @rem: unit(( @px / 16px ), rem);
+        font-size: ~"@{rem}@{s}";
+    }
+
+    .font-size-vw( 18px, 375px );
+
+    @media ( min-width: 460px ) {
+        .font-size-rem( 22px );
+        line-height: 1.45455;
+    }
+
+
+}
+

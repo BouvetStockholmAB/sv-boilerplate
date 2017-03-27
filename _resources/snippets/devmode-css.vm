@@ -1,0 +1,62 @@
+
+## Place script portlet for assetCssMain first in body.
+
+
+<script>
+//----- Script Module (JavaScript Tab)  START -----
+
+
+var assets  = [],
+    devmode = false;
+
+( function ( fileNames ) {
+
+    var currentPage = require( 'PortletContextUtil' ).getCurrentPage(),
+        propertyUtil = require( 'PropertyUtil' ),
+        session = request.getServletRequest().getSession(),
+        devmodeParam = request.getParameter( 'devmode' ),
+        assetHost    = '//localhost:8080/';
+
+    if ( typeof devmodeParam === 'string' ) {
+        session.setAttribute( 'useLocalAssets', ( devmodeParam === 'false' ) ? '' : 'true' );
+    }
+
+    devmode = ( session.getAttribute( 'useLocalAssets' ) === 'true' );
+
+    if ( !devmode ) {
+        assetHost = 'https://bouvetstockholmab.github.io/{project_name}/dist/';
+    }
+
+    fileNames.forEach( function ( fileName ) {
+        assets.push( assetHost + fileName );
+    } );
+
+}( [
+    'css/normalize.css',
+    'css/base.css',
+    'css/layout.css',
+    'css/components.css',
+    'css/background-images.css'
+] ) );
+
+
+
+//----- Script Module (JavaScript Tab)  END -----
+</script>
+
+
+##----- Script Module (Velocity Tab) START -----
+
+
+
+#if ( $devmode )
+## Localhost assets
+<script id="js-debug"> console.log('Using local assets'); </script>
+#end
+
+#foreach ( $asset in $assets )
+<link rel="stylesheet" property="stylesheet" media="all" href="$!{asset}">
+#end
+
+##----- Script Module (Velocity Tab) END -----
+

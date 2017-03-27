@@ -1,5 +1,5 @@
 
-## Place as "Additional HEAD element" in classic mode (velocity)
+## Place as snippet on sitePage
 
 <script>
     var _b = _b || {}, BV = BV || {}; _b.init = [];   

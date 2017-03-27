@@ -1,0 +1,63 @@
+
+## Place script portlet for assetJsMain last in body.
+
+
+<script>
+//----- Script Module (JavaScript Tab)  START -----
+
+var assets = [],
+    devmode = false;
+
+( function ( fileNames ) {
+
+    var currentPage = require( 'PortletContextUtil' ).getCurrentPage(),
+        propertyUtil = require( 'PropertyUtil' ),
+        session = request.getServletRequest().getSession(),
+        assetHost = '//localhost:8080/';
+
+    devmode = ( session.getAttribute( 'useLocalAssets' ) === 'true' );
+
+    if ( !devmode ) {
+        assetHost = 'https://bouvetstockholmab.github.io/{project_name}/dist/';
+    }
+
+    fileNames.forEach( function ( fileName ) {
+        assets.push( assetHost + fileName );
+    } );
+
+
+}( [
+    'js/vendor/cookie-monster.custom.js',
+    'js/vendor/cookies.js',
+    'js/vendor/jquery-custom-plugins.js',
+    'js/vendor/polyfills.js',
+    'js/first.js',
+    'js/search-box.js',
+    //'js/ ... / last.js',
+    'js/last.js'
+] ) );
+
+//----- Script Module (JavaScript Tab)  END -----
+</script>
+
+
+
+##----- Script Module (Velocity Tab) START -----
+
+
+#foreach ( $asset in $assets )
+<script src="$!{asset}"></script>
+#end
+#if ( $devmode )
+<script>
+    ( function() {
+        _b.load.js( '//localhost:8088/livereload.js?snipver=1' );
+    }() );
+</script>
+#end
+
+
+##----- Script Module (Velocity Tab) END -----
+
+
+
