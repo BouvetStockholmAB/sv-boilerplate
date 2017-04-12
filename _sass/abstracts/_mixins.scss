@@ -55,6 +55,23 @@
 }
 
 /// @author Henrik Ekelöf
+@mixin buttonReset {
+    display: inline-block;
+    appearance: none;
+    background: {
+        image: none;
+    }
+    border: {
+        style: none;
+        width: 0;
+        radius: 0;
+    }
+    box-shadow: none;
+    text-shadow: none;
+    text-decoration: none;
+}
+
+/// @author Henrik Ekelöf
 @mixin imageReplace( $w, $h ) {
     display: block;
     width: $w;
