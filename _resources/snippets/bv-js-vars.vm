@@ -5,4 +5,8 @@
     var _b = _b || {}, BV = BV || {}; _b.init = [];   
     document.documentElement.className += ' bv-js ';    
 </script>
+<style>
+/* Reset SV blockquote */
+blockquote.sv-blockquote { position: relative; background-image: none; margin: 0; padding: 0; }
+</style>
 
