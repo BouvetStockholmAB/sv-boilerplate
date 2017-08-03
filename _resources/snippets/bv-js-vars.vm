@@ -6,7 +6,7 @@
     document.documentElement.className += ' bv-js ';    
 </script>
 <style>
-/* Reset SV blockquote */
-blockquote.sv-blockquote { position: relative; background-image: none; margin: 0; padding: 0; }
+    /* Reset SV blockquote */
+    blockquote.sv-blockquote, blockquote.sv-blockquote-edit { position: relative; background-image: none; margin: 0; padding: 0; }
 </style>
 

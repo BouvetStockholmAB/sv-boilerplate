@@ -221,13 +221,14 @@ _b.throttle = function ( fn, threshhold, scope ) {
 
     $( function () {
         _b.isEditMode = ( function () {
-            var $body = $( document.body );
-            return ( $body.hasClass( 'sv-edit-mode' ) ||
+            var $docEl = $( document.documentElement ),
+                $body  = $( document.body );
+            return ( $docEl.hasClass( 'sv-edit-mode' ) ||
+                     $body.hasClass( 'sv-edit-mode' ) ||
                      $body.hasClass( 'sv-editing-mode' ) ||
                      $body.hasClass( 'sv-classic-edit-mode' ) );
         }() );
     } );
-
 
 }( jQuery ) );
 
