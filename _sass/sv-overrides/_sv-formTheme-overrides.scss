@@ -1,0 +1,125 @@
+
+$gray: #ccc;
+$black: #000;
+$helvetica: sans-serif;
+
+.sv-formFieldRow textarea,
+.sv-legacyFormRow textarea {
+    max-width: 100%;
+}
+
+.sv-defaultFormTheme {
+    //label
+    .normal {
+        font-family: $helvetica;
+        //font-weight: 400 !important;
+        font-size: 1em;
+        border-radius: 0;
+    }
+    span.normal:not([id]) {
+        color: $gray;
+        font-family: $helvetica;
+        font-weight: 400;
+        font-style: italic;
+        font-size: 18px;
+    }
+
+    .sv-formFieldRow {
+        margin: 0 0 10px;
+    }
+
+    input[type=text],
+    input[type=email],
+    input[type=url],
+    input[type=tel],
+    input[type=number],
+    textarea,
+    select {
+
+        //display: block;
+        //box-sizing: border-box;
+        //color: #555;
+        //background-color: #fff;
+        //background-image: none;
+        //width: 100%;
+        //padding: 0 0 0 12px;
+        //line-height: normal!important;
+        //height: 2em;
+        //border: 1px solid #ccc;
+        //border-radius: 4px;
+        //box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+        //transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+        //-webkit-appearance: none;
+
+        border: {
+            color: $gray;
+            radius: 0;
+        }
+        box-shadow: none;
+        padding: 0 10px;
+
+
+        &:focus {
+            border-color: $black;
+            box-shadow: inset 1px 1px 1px rgba(0, 0, 0, .1);
+            //box-shadow: none;
+        }
+    }
+
+
+    input[type=text],
+    input[type=email],
+    input[type=url],
+    input[type=tel],
+    input[type=number] {
+        height: 44px;
+    }
+
+    textarea,
+    select {
+
+    }
+
+    .sv-form-singleselectionfield {
+        input[type=radio] {
+            margin: 5px 0;
+        }
+    }
+
+    //select.sv-form-singleselectionfield {}
+
+    textarea {
+        resize: vertical;
+        min-height: 70px;
+        height: 90px;
+    }
+
+    select {
+        height: 44px;
+        -webkit-appearance: none;
+    }
+
+    button,
+    input[type=button],
+    input[type=submit] {
+        //@include standardButton;
+
+        border: {
+            color: $gray;
+            style: solid;
+            width: 1px;
+        }
+        //box-shadow: 1px 1px 1px rgba(0, 0, 0, .3);
+
+        @include hover-focus-active {
+            border: {
+                color: $black;
+                style: solid;
+                width: 1px;
+            }
+
+        }
+    }
+}
+
+
