@@ -1,0 +1,26 @@
+## Add to sitePage as code snippet
+#set( $currentPage = $sitevisionUtils.getPortletContextUtil().getCurrentPage() )
+#set( $propertyUtil = $sitevisionUtils.getPropertyUtil() )
+#set( $hero = $propertyUtil.getNode( $currentPage, "heroImage" ) )
+#set( $heroSmall = $propertyUtil.getNode( $currentPage, "heroImageSmall" ) )
+#set( $srcL = false )
+#set( $srcS = false )
+#if ( $hero )
+#set( $srcL = $propertyUtil.getString( $hero, "URI" ) )
+#else
+#set( $srcL = $propertyUtil.getString( $currentPage, "heroImage", "" ) )
+#end
+#if ( $heroSmall )
+#set( $srcS = $propertyUtil.getString( $heroSmall, "URI" ) )
+#else
+#set( $srcS = $propertyUtil.getString( $currentPage, "heroImageSmall", "" ) )
+#end
+#if ( ( !$srcS || $srcS == "" ) && ( $srcL && $srcL != "" ) )
+#set( $srcS = $srcL )
+#end
+#if ( $srcL && $srcL != "" )
+<style>
+    @media (max-width: 767px) { .ribbon__img__bg--small { background-image: url("$!{srcS}") } }
+    @media (min-width: 768px) { .ribbon__img__bg--large { background-image: url("$!{srcL}") } }
+</style>
+#end
