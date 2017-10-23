@@ -1,14 +1,14 @@
 {
-  "name": "nrm-nis",
+  "name": "sv-boilerplate",
   "version": "1.0.0",
-  "description": "Nrm-nis",
+  "description": "SiteVision Front End Boilerplate",
   "main": "gulpfile.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/BouvetStockholmAB/nrm-nis.git"
+    "url": "https://github.com/BouvetStockholmAB/sv-boilerplate.git"
   },
   "keywords": [
     "Bouvet",
@@ -17,9 +17,9 @@
   "author": "Bouvet",
   "license": "UNLICENSED",
   "bugs": {
-    "url": "https://github.com/BouvetStockholmAB/nrm-nis/issues"
+    "url": "https://github.com/BouvetStockholmAB/sv-boilerplate/issues"
   },
-  "homepage": "http://bouvetstockholmab.github.io/nrm-nis/",
+  "homepage": "http://bouvetstockholmab.github.io/sv-boilerplate/",
   "devDependencies": {
     "gulp": "^3.9.1",
     "gulp-autoprefixer": "^4.0.0",

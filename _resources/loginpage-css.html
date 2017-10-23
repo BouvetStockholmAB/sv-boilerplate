@@ -1,7 +1,20 @@
 <style>
 
+    html {
+        font: -apple-system-body;
+        text-size-adjust: 100%;
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    *, *::before, *::after {
+        box-sizing: inherit;
+    }
+
     .sv-login-form {
-        max-width: 400px; margin: 0 auto;
+        max-width: 400px;
+        margin: 0 auto;
     }
 
     .sv-login-form label {
@@ -22,27 +35,35 @@
     }
 
     .sv-login-form input[type=submit] {
-        font: 14px/1 sans-serif !important;
-        height: 44px;
-        line-height: 44px;
+        -webkit-appearance: none;
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-size: 18px;
+        font-weight: 700;
+        height: 48px;
+        line-height: 48px;
         margin: 1em 0 0;
-        padding: 0 32px;
-        background-color: #dfdfdf;
-        color: #222;
+        padding: 0 30px;
+        background-color: #1f4c93;
+        color: #fff;
         text-align: center;
         border: none;
-        border-radius: 0;
+        border-radius: 3px;
         outline: none;
-        text-transform: uppercase !important;
-        letter-spacing: 1px !important;
     }
 
     .sv-login-form input[type=submit]:hover,
     .sv-login-form input[type=submit]:active,
     .sv-login-form input[type=submit]:focus {
-        background-color: #bfbfbf;
-        color: #000;
-        outline: none;
+        background-color: #1f4c93;
+        color: #fff;
+        -webkit-box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.15);
+        box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.15);
+    }
+
+    svg {
+        display: block;
+        max-width: 200px;
+        margin: 100px auto 50px;
     }
 
 

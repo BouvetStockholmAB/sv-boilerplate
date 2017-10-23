@@ -18,7 +18,7 @@ var assets = [],
     devmode = ( session.getAttribute( 'useLocalAssets' ) === 'true' );
 
     if ( !devmode ) {
-        assetHost = 'https://bouvetstockholmab.github.io/{project_name}/dist/';
+        assetHost = 'https://bouvetstockholmab.github.io/{project_name}/build/';
     }
 
     fileNames.forEach( function ( fileName ) {
@@ -27,13 +27,12 @@ var assets = [],
 
 
 }( [
-    'js/vendor/cookie-monster.custom.js',
-    'js/vendor/cookies.js',
+    //'js/vendor/cookie-monster.custom.js',
+    //'js/vendor/cookies.js',
     'js/vendor/jquery-custom-plugins.js',
     'js/vendor/polyfills.js',
     'js/first.js',
-    'js/search-box.js',
-    //'js/ ... / last.js',
+    //'js/foo.js',
     'js/last.js'
 ] ) );
 

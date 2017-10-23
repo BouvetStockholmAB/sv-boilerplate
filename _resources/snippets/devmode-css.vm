@@ -24,7 +24,7 @@ var assets  = [],
     devmode = ( session.getAttribute( 'useLocalAssets' ) === 'true' );
 
     if ( !devmode ) {
-        assetHost = 'https://bouvetstockholmab.github.io/{project_name}/dist/';
+        assetHost = 'https://bouvetstockholmab.github.io/{project_name}/build/';
     }
 
     fileNames.forEach( function ( fileName ) {
@@ -33,6 +33,7 @@ var assets  = [],
 
 }( [
     'css/normalize.css',
+    'css/sv-overrides.css',
     'css/base.css',
     'css/layout.css',
     'css/components.css',
