@@ -134,7 +134,7 @@ _b.throttle = function ( fn, threshhold, scope ) {
 
 // ==|== Misc Toolbox Functions ================================================================= //
 
-( function () {
+( function ( $ ) {
 
     'use strict';
 
@@ -195,11 +195,11 @@ _b.throttle = function ( fn, threshhold, scope ) {
     // ==|== Scrollable Element ================================================================= //
 
     _b.scrollableElement = ( function ( doc ) {
-        var docEl = doc.documentElement,
-            scrollTop = docEl.scrollTop,
+        var docEl       = doc.documentElement,
+            scrollTop   = docEl.scrollTop,
             hasScrolled;
         docEl.scrollTop += 1;
-        hasScrolled = ( docEl.scrollTop === scrollTop + 1 );
+        hasScrolled     = ( docEl.scrollTop === scrollTop + 1 );
         docEl.scrollTop = scrollTop;
         if ( hasScrolled ) {
             return docEl;
@@ -209,7 +209,32 @@ _b.throttle = function ( fn, threshhold, scope ) {
 
     _b.$scrollableElement = jQuery( _b.scrollableElement );
 
-}() );
+    // Usage:
+    // _b.scrollTo( 100 );
+    // _b.scrollTo( $( '.foo' ) );
+    // _b.scrollTo( { position: 100, speed: 200, after: function () { /* ... */ } } );
+    // _b.scrollTo( { position: $( '.foo' ), speed: 200, after: function () { /* ... */ } } );
+    _b.scrollTo = function ( options ) {
+        if ( _b.isInt( options ) ) {
+            options = { position: options };
+        }
+        if ( $.isjQueryObject( options ) ) {
+            options = { position: options };
+        }
+        if ( $.isjQueryObject( options.position ) ) {
+            options.position = options.position.offset().top;
+        }
+        $.extend( {
+            position: 0,
+            speed   : 300,
+            after   : function () {}
+        }, ( options || {} ) );
+        _b.$scrollableElement.animate( {
+            scrollTop: options.position
+        }, options.speed, options.after );
+    };
+
+}( jQuery ) );
 
 
 
@@ -278,7 +303,7 @@ _b.cutsTheMustard = (
 
     function getFunction( fn ) {
 
-        var parts = fn.split( '.' ),
+        var parts           = fn.split( '.' ),
             currentFunction = window,
             i, l;
 

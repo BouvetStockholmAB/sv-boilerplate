@@ -6,7 +6,6 @@
 
     'use strict';
 
-    // Pretty show/hide animation, height and opacity
     if ( !$.isjQueryObject ) {
         $.isjQueryObject = function ( obj ) {
             return ( obj && ( obj instanceof jQuery || 'jquery' in Object( obj ) ) );
