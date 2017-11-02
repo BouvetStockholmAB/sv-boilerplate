@@ -1,63 +1,43 @@
-/*global jQuery, FastClick, _b */
+/*global jQuery, _b */
 
 
-// ==|== FastClick ============================================================================== //
+// ==|== Page min height ======================================================================== //
 
-( function ( d, $ ) {
+( function ( win, $ ) {
 
     'use strict';
 
-    _b.attachFastClick = function ( elms ) {
+    var $header,
+        //$nav,
+        $footer,
+        //$aside,
+        $content;
 
-        var i, j;
+    function stickyFooter() {
 
-        function attachFastClick( el ) {
+        var h = $header.outerHeight( true ) +
+                //$nav.outerHeight( true ) +
+                $footer.outerHeight( true ); // Margin below footer
 
-            if ( !el ) {
-                return;
-            }
-            
-            if ( $.isjQueryObject( el ) ) {
-                // jQuery object - make recursive call for each node.
-                el.each( function ( i, e ) { attachFastClick( e ); } );
-                return;
-            }
+        $content.css( 'min-height', 'calc(100vh - ' + h + 'px)' );
 
-            if ( el.length ) {
-                // NodeList - make recursive call for each node.
-                for ( i = 0, j = el.length; i < j; i += 1 ) {
-                    attachFastClick( el[ i ] );
-                }
-                return;
-            }
-
-            if ( el.nodeType === 1 ) {
-                // Single element. Attach FastClick.
-                FastClick.attach( el );
-            }
-
-        }
-
-        if ( elms.length ) {
-            elms.forEach( attachFastClick );
-        } else {
-            attachFastClick( elms );
-        }
-
-    };
-
-    /*
-
-    // Uncomment to use, also make sure fastclick.js is included in gulpfile.js.
+        //if ( $aside.length && $aside.height() > $content.height() - 100 ) {
+        //    $content.css( 'min-height', ( $aside.height() + 100  ) + 'px' );
+        //}
+    }
 
     $( function () {
-        _b.attachFastClick( [
-            d.querySelector( '.hamburger' ),
-            $( '.searchBox__submit' )
-        ] );
+
+        $header  = $( '.tmpl__header' );
+        //$nav     = $( '.tmpl__nav' );
+        $footer  = $( '.tmpl__footer' );
+        $content = $( '.tmpl__contentArea' );
+        //$aside   = $( '.tmpl__aside' );
+
+        $( win ).on( 'resize', _b.throttle( stickyFooter, 1000 ) );
+        stickyFooter();
+
     } );
 
-    */
-    
-}( document, jQuery ) );
+}( window, jQuery ) );
 

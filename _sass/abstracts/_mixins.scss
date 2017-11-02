@@ -98,6 +98,29 @@
     text-decoration: none;
 }
 
+@mixin stdButton {
+    @include buttonReset;
+    font: {
+        size: 16px;
+        weight: 400;
+        family: sans-serif;
+    }
+    height: 44px;
+    line-height: 44px;
+    padding: 0 20px;
+    background-color: #666;
+    color: #fff;
+    text-align: center;
+    border: none;
+    border-radius: 2px;
+    outline: none;
+    white-space: nowrap;
+
+    @include hover-focus-active {
+        background-color: #333;
+    }
+}
+
 /// @author Henrik Ekelöf
 @mixin imageReplace( $w, $h ) {
     display: block;
