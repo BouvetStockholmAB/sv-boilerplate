@@ -100,6 +100,13 @@ _b.throttle = function ( fn, threshhold, scope ) {
             script.src   = src;
             beforeEl.parentNode.insertBefore( script, beforeEl );
             return script;
+        },
+        css: function ( href ) {
+            var link   = doc.createElement( 'link' );
+            link.href  = href;
+            link.rel   = 'stylesheet';
+            link.media = 'all';
+            document.head.appendChild( link );
         }
     };
 
@@ -215,7 +222,7 @@ _b.throttle = function ( fn, threshhold, scope ) {
     // _b.scrollTo( { position: 100, speed: 200, after: function () { /* ... */ } } );
     // _b.scrollTo( { position: $( '.foo' ), speed: 200, after: function () { /* ... */ } } );
     _b.scrollTo = function ( options ) {
-        if ( _b.isInt( options ) ) {
+        if ( _b.isNumber( options ) ) {
             options = { position: options };
         }
         if ( $.isjQueryObject( options ) ) {
