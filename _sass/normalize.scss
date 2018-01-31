@@ -21,6 +21,7 @@ html {
  */
 *, *::before, *::after {
     box-sizing: inherit;
+    text-decoration-skip: ink;
 }
 
 /**
