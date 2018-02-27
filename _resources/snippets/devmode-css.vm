@@ -15,7 +15,7 @@ var assets  = [],
         propertyUtil = require( 'PropertyUtil' ),
         session = request.getServletRequest().getSession(),
         devmodeParam = request.getParameter( 'devmode' ),
-        assetHost    = '//localhost:8080/';
+        assetHost    = 'https://localhost:8080/';
 
     if ( typeof devmodeParam === 'string' ) {
         session.setAttribute( 'useLocalAssets', ( devmodeParam === 'false' ) ? '' : 'true' );

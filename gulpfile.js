@@ -12,7 +12,8 @@
         sass         = require( 'gulp-sass' ),
         jshint       = require( 'gulp-jshint' ),
         jscs         = require( 'gulp-jscs' ),
-        gulp         = require( 'gulp' );
+        gulp         = require( 'gulp' ),
+        fs           = require( 'fs' );
 
 
     //----- Building JS -----//
@@ -91,7 +92,10 @@
     gulp.task( 'connect', function () {
         connect.server( {
             root      : 'build',
-            // https     : true,
+            https     : {
+                key : fs.readFileSync( '_cert/localhost.key' ),
+                cert: fs.readFileSync( '_cert/localhost.crt' )
+            },
             livereload: {
                 enable: true,
                 port  : 8088

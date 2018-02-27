@@ -13,7 +13,7 @@ var assets = [],
     var currentPage = require( 'PortletContextUtil' ).getCurrentPage(),
         propertyUtil = require( 'PropertyUtil' ),
         session = request.getServletRequest().getSession(),
-        assetHost = '//localhost:8080/';
+        assetHost = 'https://localhost:8080/';
 
     devmode = ( session.getAttribute( 'useLocalAssets' ) === 'true' );
 
